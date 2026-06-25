@@ -1,0 +1,10 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="32" cy="32" r="30" fill="#0a0c10" stroke="#D4AF37" stroke-width="2.5"/>
+  <g transform="translate(32,32)">
+    <!-- balón estilizado, pentágono central + gajos, en dorado -->
+    <circle r="20" fill="none" stroke="#D4AF37" stroke-width="1.4" opacity="0.55"/>
+    <polygon points="0,-9 8.5,-3 5.5,7 -5.5,7 -8.5,-3" fill="#D4AF37"/>
+    <path d="M0,-9 L0,-20 M8.5,-3 L18,-7 M5.5,7 L11,18 M-5.5,7 L-11,18 M-8.5,-3 L-18,-7"
+          stroke="#D4AF37" stroke-width="1.6" fill="none" opacity="0.85"/>
+  </g>
+</svg>

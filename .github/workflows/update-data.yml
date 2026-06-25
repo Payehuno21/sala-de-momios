@@ -1,0 +1,34 @@
+name: Actualizar calendario Mundial 2026
+
+on:
+  schedule:
+    # Cada 15 minutos durante el horario típico de partidos (12:00–23:00 UTC,
+    # cubre las franjas habituales del Mundial en sedes USA/MX/CA)
+    - cron: "*/15 12-23 * * *"
+    # Una vez al día fuera de ese horario, para no perder actualizaciones de calendario
+    - cron: "0 6 * * *"
+  workflow_dispatch: {} # permite correrlo manualmente desde la pestaña Actions
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Actualizar matches.json
+        run: node scripts/update-data.mjs
+
+      - name: Commitear si hubo cambios
+        run: |
+          git config user.name "sala-de-momios-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add public/data/matches.json
+          git diff --staged --quiet || git commit -m "data: actualizar calendario [skip ci]"
+          git push
