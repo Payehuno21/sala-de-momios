@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 html, body, #root {
-  background: #0a0c10;
-  color: #f5f2ea;
+  background: #070914;
+  color: #f3f1ff;
   min-height: 100%;
 }
 
@@ -12,14 +12,84 @@ html, body, #root {
   -webkit-tap-highlight-color: transparent;
 }
 
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-thumb { background: #272d3a; border-radius: 4px; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-thumb { background: rgba(167,139,250,0.4); border-radius: 8px; }
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .fi {
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.12);
+  border-radius: 3px;
+}
+
+/* Fondo mesh-gradient animado, fijo detrás de toda la app */
+.mesh-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: #070914;
+}
+.mesh-bg::before, .mesh-bg::after, .mesh-bg .mesh-blob {
+  content: "";
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+}
+.mesh-bg::before {
+  top: -10%;
+  left: -10%;
+  background: radial-gradient(circle, #22d3ee, transparent 70%);
+  animation: meshDrift 18s ease-in-out infinite;
+}
+.mesh-bg::after {
+  bottom: -15%;
+  right: -10%;
+  background: radial-gradient(circle, #f472d0, transparent 70%);
+  animation: meshDrift 22s ease-in-out infinite reverse;
+}
+.mesh-bg .mesh-blob {
+  top: 30%;
+  left: 35%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, #a78bfa, transparent 70%);
+  animation: meshDrift 26s ease-in-out infinite;
+}
+
+/* Tarjeta de vidrio reutilizable */
+.glass {
+  background: rgba(22,26,46,0.55);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 8px 32px -8px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.06) inset;
+}
+.glass-strong {
+  background: rgba(30,35,58,0.68);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid rgba(167,139,250,0.35);
+  box-shadow: 0 8px 40px -8px rgba(124,123,255,0.25), 0 1px 0 rgba(255,255,255,0.08) inset;
+}
+
+.text-gradient {
+  background-image: linear-gradient(110deg, #22d3ee 0%, #a78bfa 50%, #f472d0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.shimmer-text {
+  background-image: linear-gradient(110deg, #f3f1ff 30%, #a78bfa 50%, #f3f1ff 70%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }

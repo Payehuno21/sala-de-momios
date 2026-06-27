@@ -62,8 +62,13 @@ Si te pide usuario/contraseña y la contraseña normal no funciona, GitHub ahora
 1. Ve a [vercel.com](https://vercel.com) e inicia sesión con tu cuenta de GitHub (botón "Continue with GitHub").
 2. Click **"Add New..."** → **"Project"**.
 3. Busca y selecciona el repositorio `sala-de-momios` que acabas de subir → **"Import"**.
-4. Vercel debería detectar automáticamente: Framework Preset = **Vite**, Build Command = `npm run build`, Output Directory = `dist`. Si no lo detecta solo, ponlo manualmente así.
-5. Click **"Deploy"**.
+4. **Antes de hacer click en Deploy**, despliega la sección "Environment Variables" y agrega:
+   - `ODDS_API_KEY` → tu clave real de The Odds API
+   - `FOOTBALL_API_KEY` → tu clave real de API-Football
+   
+   Estas claves NUNCA van en el código ni en GitHub — viven solo aquí, en el servidor de Vercel. Las funciones en `/api` las leen del entorno, nunca están escritas en ningún archivo del repo.
+5. Vercel debería detectar automáticamente: Framework Preset = **Vite**, Build Command = `npm run build`, Output Directory = `dist`. Si no lo detecta solo, ponlo manualmente así.
+6. Click **"Deploy"**.
 
 En 1-2 minutos tendrás una URL pública como `sala-de-momios.vercel.app`.
 

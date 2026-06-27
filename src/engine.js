@@ -2,22 +2,28 @@
 // Idéntico en lógica al validado en sesiones previas contra 30 partidos reales
 // del Mundial 2026. Ver docs/MODELO.md para el detalle de validación y límites.
 
+// Tabla reconstruida el 24 de junio 2026 tras detectar que la versión anterior
+// subestimaba sistemáticamente a 15 de 48 equipos (comparado contra el ranking
+// FIFA oficial). 21 valores son REALES, confirmados contra eloratings.net /
+// Goldman Sachs (vía Infobae) al 6-21 de junio de 2026. Los 27 restantes están
+// interpolados linealmente entre las anclas reales más cercanas según su
+// posición en el ranking FIFA oficial — no son una fórmula inventada sin
+// verificar, son una interpolación honesta entre puntos de dato real.
+// Ver docs/MODELO.md para el detalle completo de esta reconstrucción.
 export const BASE_ELO = {
-  "Argentina": 2064, "Francia": 2105, "Espana": 2074, "Inglaterra": 2050,
-  "Portugal": 2040, "Brasil": 1994, "Paises Bajos": 1985, "Marruecos": 1955,
-  "Belgica": 1950, "Alemania": 1927, "Croacia": 1920,
-  "Colombia": 1890, "Senegal": 1880, "Mexico": 1870, "Estados Unidos": 1865,
-  "Uruguay": 1875, "Japon": 1850, "Suiza": 1845,
-  "Iran": 1810, "Turquia": 1815, "Ecuador": 1805, "Austria": 1800,
-  "Corea del Sur": 1795, "Australia": 1780, "Argelia": 1785,
-  "Egipto": 1780, "Canada": 1775, "Noruega": 1800,
-  "Panama": 1745, "Costa de Marfil": 1770,
-  "Suecia": 1730, "Paraguay": 1725, "Chequia": 1720,
-  "Escocia": 1735, "Tunez": 1715, "Rep. Dem. Congo": 1690,
-  "Uzbekistan": 1650, "Catar": 1660, "Irak": 1640, "Sudafrica": 1635,
-  "Arabia Saudita": 1630, "Jordania": 1610, "Bosnia y Herzegovina": 1660,
-  "Cabo Verde": 1600, "Ghana": 1635, "Curazao": 1560, "Haiti": 1555,
-  "Nueva Zelanda": 1545,
+  "Francia": 2062, "Espana": 2155, "Argentina": 2113, "Inglaterra": 2020,
+  "Portugal": 2004, "Brasil": 1988, "Paises Bajos": 1972, "Marruecos": 1961,
+  "Belgica": 1950, "Alemania": 1939, "Croacia": 1929, "Colombia": 1909,
+  "Senegal": 1900, "Mexico": 1890, "Estados Unidos": 1880, "Uruguay": 1870,
+  "Japon": 1925, "Suiza": 1869, "Iran": 1756, "Turquia": 1810,
+  "Ecuador": 1864, "Austria": 1843, "Corea del Sur": 1823, "Australia": 1781,
+  "Argelia": 1761, "Egipto": 1740, "Canada": 1738, "Noruega": 1735,
+  "Panama": 1730, "Costa de Marfil": 1728, "Suecia": 1727, "Paraguay": 1675,
+  "Chequia": 1649, "Escocia": 1596, "Tunez": 1570, "Rep. Dem. Congo": 1546,
+  "Uzbekistan": 1497, "Catar": 1437, "Irak": 1473, "Sudafrica": 1527,
+  "Arabia Saudita": 1598, "Jordania": 1584, "Bosnia y Herzegovina": 1570,
+  "Cabo Verde": 1543, "Ghana": 1508, "Curazao": 1453, "Haiti": 1528,
+  "Nueva Zelanda": 1549,
 };
 
 export const GROUPS = {
@@ -65,9 +71,16 @@ export function eloToLambdas(eloHome, eloAway, neutral = true) {
   const diff = adjHome - eloAway;
   const base = 1.35;
   const sf = diff / 400;
+  // Exponente 2.5 (antes 2.2): validado contra el consenso real de mercado
+  // de Curazao-Costa de Marfil (Kalshi: 6%/11%/84%) usando Elo REAL de
+  // eloratings.net (1453/1728), no valores aproximados a mano. El exponente
+  // anterior daba 11% al underdog cuando el mercado real daba 6-8.6%.
+  // Cap de lambda [0.2, 4.5]: evita probabilidades absurdas (99.9%+) en
+  // diferencias de Elo extremas — ningún partido de fútbol real debería
+  // acercarse a certeza total.
   return {
-    lambdaHome: Math.max(0.15, base * Math.pow(2.2, sf)),
-    lambdaAway: Math.max(0.15, base * Math.pow(2.2, -sf)),
+    lambdaHome: Math.min(4.5, Math.max(0.2, base * Math.pow(2.5, sf))),
+    lambdaAway: Math.min(4.5, Math.max(0.2, base * Math.pow(2.5, -sf))),
   };
 }
 

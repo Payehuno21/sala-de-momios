@@ -45,9 +45,9 @@ function CalibrationChart({ results }) {
               <span>Modelo dice {b.label} ({b.n} part.)</span>
               <span className="font-bold text-paper">{realRate !== null ? pct(realRate) : "—"} real</span>
             </div>
-            <div className="relative h-2 bg-panel2">
-              <div className="absolute top-0 h-2 bg-lineGold opacity-50" style={{ width: `${midPredicted * 100}%` }} />
-              {realRate !== null && <div className="absolute top-0 h-2 bg-gold" style={{ width: `${realRate * 100}%` }} />}
+            <div className="relative h-2 glass">
+              <div className="absolute top-0 h-2 rounded-full bg-violet opacity-40" style={{ width: `${midPredicted * 100}%` }} />
+              {realRate !== null && <div className="absolute top-0 h-2 rounded-full bg-brand-gradient transition-all duration-700" style={{ width: `${realRate * 100}%` }} />}
             </div>
           </div>
         );
@@ -62,23 +62,23 @@ function CalibrationChart({ results }) {
 export function GuideTab({ results }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-[13px] leading-relaxed text-paper/90">
-      <div className="border border-line bg-panel p-4">
-        <h3 className="font-bold mb-2 text-gold">¿Cómo funciona el modelo?</h3>
-        <p className="mb-2"><b>1. Elo dinámico:</b> cada selección parte de un rating calibrado sobre 920 partidos internacionales reales. Cada resultado confirmado recalcula los ratings.</p>
+      <div className="glass rounded-2xl p-4">
+        <h3 className="font-bold mb-2 text-gradient">¿Cómo funciona el modelo?</h3>
+        <p className="mb-2"><b>1. Elo dinámico:</b> cada selección parte de un rating reconstruido el 24 de junio usando valores reales de eloratings.net como ancla (no estimaciones a mano). Cada resultado confirmado recalcula los ratings.</p>
         <p className="mb-2"><b>2. Dixon-Coles Poisson:</b> corrige el sesgo del Poisson simple, que subestima marcadores bajos como 0-0 y 1-1.</p>
         <p><b>3. Monte Carlo:</b> miles de simulaciones del torneo para estimar avance, semis y campeón.</p>
       </div>
-      <div className="border border-lineGold bg-panel p-4">
-        <h3 className="font-bold mb-2 text-gold">¿El modelo es honesto con sus probabilidades?</h3>
+      <div className="glass-strong rounded-2xl p-4">
+        <h3 className="font-bold mb-2 text-gradient">¿El modelo es honesto con sus probabilidades?</h3>
         <p className="mb-3">Cuando dice "70% de gane", ¿de verdad pasa el 70% de las veces? Eso es calibración, más importante que solo aciertos.</p>
         <CalibrationChart results={results} />
       </div>
-      <div className="border border-line bg-panel p-4">
-        <h3 className="font-bold mb-2 text-gold">¿Qué es el Edge (EV)?</h3>
+      <div className="glass rounded-2xl p-4">
+        <h3 className="font-bold mb-2 text-gradient">¿Qué es el Edge (EV)?</h3>
         <p>Compara la probabilidad del modelo contra la implícita en el momio. Un edge positivo no garantiza ganar esa apuesta puntual.</p>
       </div>
-      <div className="border border-line bg-panel p-4">
-        <h3 className="font-bold mb-2 text-gold">¿Qué es Kelly fraccionado?</h3>
+      <div className="glass rounded-2xl p-4">
+        <h3 className="font-bold mb-2 text-gradient">¿Qué es Kelly fraccionado?</h3>
         <p>Calcula qué % del bankroll apostar para maximizar crecimiento a largo plazo. Esta app usa Kelly al 50%.</p>
       </div>
       <div className="border border-lossDim bg-lossSoft p-4 lg:col-span-2">
