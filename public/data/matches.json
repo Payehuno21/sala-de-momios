@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-06-24T04:55:41.258Z",
-  "source": "openfootball/worldcup.json",
+  "fetchedAt": "2026-06-27T20:39:04.957Z",
+  "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 30,
+  "playedMatches": 66,
   "matches": [
     {
       "matchNum": null,
@@ -74,9 +74,9 @@
       "away": "Mexico",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 3,
       "venue": "Mexico City"
     },
     {
@@ -89,9 +89,9 @@
       "away": "Corea del Sur",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 0,
       "venue": "Monterrey (Guadalupe)"
     },
     {
@@ -164,9 +164,9 @@
       "away": "Canada",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 1,
       "venue": "Vancouver"
     },
     {
@@ -179,9 +179,9 @@
       "away": "Catar",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 3,
+      "ag": 1,
       "venue": "Seattle"
     },
     {
@@ -239,9 +239,9 @@
       "away": "Haiti",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 3,
+      "ag": 0,
       "venue": "Philadelphia"
     },
     {
@@ -254,9 +254,9 @@
       "away": "Brasil",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 3,
       "venue": "Miami (Miami Gardens)"
     },
     {
@@ -269,9 +269,9 @@
       "away": "Haiti",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 4,
+      "ag": 2,
       "venue": "Atlanta"
     },
     {
@@ -329,9 +329,9 @@
       "away": "Paraguay",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 1,
       "venue": "San Francisco Bay Area (Santa Clara)"
     },
     {
@@ -344,9 +344,9 @@
       "away": "Estados Unidos",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 3,
+      "ag": 2,
       "venue": "Los Angeles (Inglewood)"
     },
     {
@@ -359,9 +359,9 @@
       "away": "Australia",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 0,
       "venue": "San Francisco Bay Area (Santa Clara)"
     },
     {
@@ -404,9 +404,9 @@
       "away": "Costa de Marfil",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 1,
       "venue": "Toronto"
     },
     {
@@ -419,9 +419,9 @@
       "away": "Curazao",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 0,
       "venue": "Kansas City"
     },
     {
@@ -434,9 +434,9 @@
       "away": "Costa de Marfil",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 2,
       "venue": "Philadelphia"
     },
     {
@@ -449,9 +449,9 @@
       "away": "Alemania",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 1,
       "venue": "New York/New Jersey (East Rutherford)"
     },
     {
@@ -494,9 +494,9 @@
       "away": "Suecia",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 5,
+      "ag": 1,
       "venue": "Houston"
     },
     {
@@ -509,9 +509,9 @@
       "away": "Japon",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 4,
       "venue": "Monterrey (Guadalupe)"
     },
     {
@@ -524,9 +524,9 @@
       "away": "Suecia",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 1,
       "venue": "Dallas (Arlington)"
     },
     {
@@ -539,9 +539,9 @@
       "away": "Paises Bajos",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 3,
       "venue": "Kansas City"
     },
     {
@@ -584,9 +584,9 @@
       "away": "Iran",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 0,
       "venue": "Los Angeles (Inglewood)"
     },
     {
@@ -599,9 +599,9 @@
       "away": "Egipto",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 3,
       "venue": "Vancouver"
     },
     {
@@ -614,9 +614,9 @@
       "away": "Iran",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 1,
       "venue": "Seattle"
     },
     {
@@ -629,9 +629,9 @@
       "away": "Belgica",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 5,
       "venue": "Vancouver"
     },
     {
@@ -674,9 +674,9 @@
       "away": "Arabia Saudita",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 4,
+      "ag": 0,
       "venue": "Atlanta"
     },
     {
@@ -689,9 +689,9 @@
       "away": "Cabo Verde",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 2,
       "venue": "Miami (Miami Gardens)"
     },
     {
@@ -704,9 +704,9 @@
       "away": "Arabia Saudita",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 0,
       "venue": "Houston"
     },
     {
@@ -719,9 +719,9 @@
       "away": "Espana",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 1,
       "venue": "Guadalajara (Zapopan)"
     },
     {
@@ -764,9 +764,9 @@
       "away": "Irak",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 3,
+      "ag": 0,
       "venue": "Philadelphia"
     },
     {
@@ -779,9 +779,9 @@
       "away": "Senegal",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 3,
+      "ag": 2,
       "venue": "New York/New Jersey (East Rutherford)"
     },
     {
@@ -794,9 +794,9 @@
       "away": "Francia",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 4,
       "venue": "Boston (Foxborough)"
     },
     {
@@ -809,9 +809,9 @@
       "away": "Irak",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 5,
+      "ag": 0,
       "venue": "Toronto"
     },
     {
@@ -854,9 +854,9 @@
       "away": "Austria",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 0,
       "venue": "Dallas (Arlington)"
     },
     {
@@ -869,9 +869,9 @@
       "away": "Argelia",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 2,
       "venue": "San Francisco Bay Area (Santa Clara)"
     },
     {
@@ -944,9 +944,9 @@
       "away": "Uzbekistan",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 5,
+      "ag": 0,
       "venue": "Houston"
     },
     {
@@ -959,9 +959,9 @@
       "away": "Rep. Dem. Congo",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 0,
       "venue": "Guadalajara (Zapopan)"
     },
     {
@@ -1034,9 +1034,9 @@
       "away": "Ghana",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 0,
       "venue": "Boston (Foxborough)"
     },
     {
@@ -1049,9 +1049,9 @@
       "away": "Croacia",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 1,
       "venue": "Toronto"
     },
     {
@@ -1090,10 +1090,10 @@
       "group": "—",
       "date": "2026-06-28",
       "time": "12:00 UTC-7",
-      "home": "2A",
-      "away": "2B",
-      "homeIsPlaceholder": true,
-      "awayIsPlaceholder": true,
+      "home": "Sudafrica",
+      "away": "Canada",
+      "homeIsPlaceholder": false,
+      "awayIsPlaceholder": false,
       "played": false,
       "hg": null,
       "ag": null,
@@ -1105,9 +1105,9 @@
       "group": "—",
       "date": "2026-06-29",
       "time": "16:30 UTC-4",
-      "home": "1E",
+      "home": "Alemania",
       "away": "3A/B/C/D/F",
-      "homeIsPlaceholder": true,
+      "homeIsPlaceholder": false,
       "awayIsPlaceholder": true,
       "played": false,
       "hg": null,
@@ -1120,10 +1120,10 @@
       "group": "—",
       "date": "2026-06-29",
       "time": "19:00 UTC-6",
-      "home": "1F",
-      "away": "2C",
-      "homeIsPlaceholder": true,
-      "awayIsPlaceholder": true,
+      "home": "Paises Bajos",
+      "away": "Marruecos",
+      "homeIsPlaceholder": false,
+      "awayIsPlaceholder": false,
       "played": false,
       "hg": null,
       "ag": null,
@@ -1135,10 +1135,10 @@
       "group": "—",
       "date": "2026-06-29",
       "time": "12:00 UTC-5",
-      "home": "1C",
-      "away": "2F",
-      "homeIsPlaceholder": true,
-      "awayIsPlaceholder": true,
+      "home": "Brasil",
+      "away": "Japon",
+      "homeIsPlaceholder": false,
+      "awayIsPlaceholder": false,
       "played": false,
       "hg": null,
       "ag": null,
@@ -1165,9 +1165,9 @@
       "group": "—",
       "date": "2026-06-30",
       "time": "12:00 UTC-5",
-      "home": "2E",
+      "home": "Costa de Marfil",
       "away": "2I",
-      "homeIsPlaceholder": true,
+      "homeIsPlaceholder": false,
       "awayIsPlaceholder": true,
       "played": false,
       "hg": null,
@@ -1180,9 +1180,9 @@
       "group": "—",
       "date": "2026-06-30",
       "time": "19:00 UTC-6",
-      "home": "1A",
+      "home": "Mexico",
       "away": "3C/E/F/H/I",
-      "homeIsPlaceholder": true,
+      "homeIsPlaceholder": false,
       "awayIsPlaceholder": true,
       "played": false,
       "hg": null,
@@ -1210,9 +1210,9 @@
       "group": "—",
       "date": "2026-07-01",
       "time": "17:00 UTC-7",
-      "home": "1D",
+      "home": "Estados Unidos",
       "away": "3B/E/F/I/J",
-      "homeIsPlaceholder": true,
+      "homeIsPlaceholder": false,
       "awayIsPlaceholder": true,
       "played": false,
       "hg": null,
@@ -1270,9 +1270,9 @@
       "group": "—",
       "date": "2026-07-02",
       "time": "20:00 UTC-7",
-      "home": "1B",
+      "home": "Suiza",
       "away": "3E/F/G/I/J",
-      "homeIsPlaceholder": true,
+      "homeIsPlaceholder": false,
       "awayIsPlaceholder": true,
       "played": false,
       "hg": null,
@@ -1315,9 +1315,9 @@
       "group": "—",
       "date": "2026-07-03",
       "time": "13:00 UTC-5",
-      "home": "2D",
+      "home": "Australia",
       "away": "2G",
-      "homeIsPlaceholder": true,
+      "homeIsPlaceholder": false,
       "awayIsPlaceholder": true,
       "played": false,
       "hg": null,
