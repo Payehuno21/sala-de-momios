@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { usePersistentState } from "./usePersistentState.js";
 import { Logo } from "./components/Logo.jsx";
 import { useMatches, toEngineResults } from "./useMatches.js";
 import { buildEloTable } from "./engine.js";
@@ -24,8 +25,8 @@ const TABS = [
 
 export default function App() {
   const [tab, setTab] = useState("daily");
-  const [bets, setBets] = useState([]);
-  const [bankroll, setBankroll] = useState(1000);
+  const [bets, setBets] = usePersistentState("sala-momios:bets", []);
+  const [bankroll, setBankroll] = usePersistentState("sala-momios:bankroll", 1000);
 
   const { matches, fetchedAt, loading, error } = useMatches();
   const results = useMemo(() => toEngineResults(matches), [matches]);
