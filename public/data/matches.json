@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-06-27T22:46:08.726Z",
+  "fetchedAt": "2026-06-28T00:05:49.249Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 66,
+  "playedMatches": 68,
   "matches": [
     {
       "matchNum": null,
@@ -1064,9 +1064,9 @@
       "away": "Inglaterra",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 2,
       "venue": "New York/New Jersey (East Rutherford)"
     },
     {
@@ -1079,9 +1079,9 @@
       "away": "Ghana",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 1,
       "venue": "Philadelphia"
     },
     {
