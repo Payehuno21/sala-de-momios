@@ -78,7 +78,7 @@ export default function App() {
       </header>
 
       <main key={tab} className="max-w-7xl mx-auto px-6 py-6 animate-fade-up">
-        {tab === "daily" && <DailyPickTab eloTable={eloTable} results={results} />}
+        {tab === "daily" && <DailyPickTab eloTable={eloTable} results={results} onAddBet={addBet} />}
         {tab === "calc" && <CalcTab eloTable={eloTable} onAddBet={addBet} />}
         {tab === "matches" && <MatchesTab matches={matches} fetchedAt={fetchedAt} loading={loading} error={error} />}
         {tab === "groups" && <GroupsTab eloTable={eloTable} results={results} />}
