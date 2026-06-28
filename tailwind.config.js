@@ -14,6 +14,7 @@ export default {
         cyan: "#22d3ee",
         violet: "#a78bfa",
         magenta: "#f472d0",
+        gold: "#e8b923",
         accentDim: "#4c3d8f",
         accentSoft: "rgba(124,123,255,0.12)",
         win: "#34eab0",
@@ -43,8 +44,11 @@ export default {
       animation: {
         "mesh-drift": "meshDrift 18s ease-in-out infinite",
         "glow-pulse": "glowPulse 2.4s ease-in-out infinite",
+        "gold-pulse": "goldPulse 2.8s ease-in-out infinite",
         "fade-up": "fadeUp 0.5s ease-out both",
         "shimmer": "shimmer 2.5s linear infinite",
+        "scan": "scanMove 6s linear infinite",
+        "live-ping": "ping 1.4s cubic-bezier(0,0,0.2,1) infinite",
       },
       keyframes: {
         meshDrift: {
@@ -56,6 +60,10 @@ export default {
           "0%, 100%": { boxShadow: "0 0 14px 0 rgba(167,139,250,0.35), 0 0 0 1px rgba(167,139,250,0.25) inset" },
           "50%": { boxShadow: "0 0 34px 6px rgba(167,139,250,0.55), 0 0 0 1px rgba(167,139,250,0.4) inset" },
         },
+        goldPulse: {
+          "0%, 100%": { boxShadow: "0 0 18px 0 rgba(232,185,35,0.25), 0 0 0 1px rgba(232,185,35,0.20) inset" },
+          "50%": { boxShadow: "0 0 42px 8px rgba(232,185,35,0.45), 0 0 0 1px rgba(232,185,35,0.40) inset" },
+        },
         fadeUp: {
           "0%": { opacity: "0", transform: "translateY(10px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
@@ -63,6 +71,10 @@ export default {
         shimmer: {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
+        },
+        scanMove: {
+          "0%": { top: "-80px" },
+          "100%": { top: "110%" },
         },
       },
     },

@@ -13,7 +13,7 @@ import { GuideTab } from "./tabs/GuideTab.jsx";
 function money(x) { return (x < 0 ? "-$" : "$") + Math.abs(x).toFixed(2); }
 
 const TABS = [
-  { id: "daily", label: "Hoy" },
+  { id: "daily", label: "Mercados" },
   { id: "calc", label: "Calculadora" },
   { id: "matches", label: "Partidos" },
   { id: "groups", label: "Grupos" },
