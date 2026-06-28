@@ -12,7 +12,7 @@ import { motivationConfidencePenalty } from "./motivation.js";
 // motivationHome/Away: salida de computeMotivation()
 // rotationHome/Away: salida de detectRotation() (o null si no hay datos)
 export function scoreCandidate(candidate, motivationHome, motivationAway, rotationHome, rotationAway) {
-  const { modelProb, bestOdds, worstOdds } = candidate;
+  const { modelProb, bestOdds, worstOdds, market } = candidate;
   const ev = expectedValue(modelProb, bestOdds);
 
   // Penalización 1: motivación (¿hay equipos sin nada en juego?)
@@ -29,7 +29,18 @@ export function scoreCandidate(candidate, motivationHome, motivationAway, rotati
   const bookSpreadPct = bestOdds && worstOdds ? (bestOdds - worstOdds) / worstOdds : 0;
   const spreadPenalty = Math.min(1, bookSpreadPct * 2); // spread de 50%+ ya es penalización máxima
 
-  const totalPenalty = Math.min(1, motivationPenalty * 0.4 + rotationPenalty * 0.4 + spreadPenalty * 0.2);
+  // Penalización 4: el mercado en sí tiene baja confianza ya validada (ver
+  // docs/MODELO.md — Over/Under y BTTS no superan la tasa base en el
+  // backtest real). Esto evita que estos mercados "ganen" el ranking solo
+  // porque su edge crudo aparente es más grande — ese tamaño de edge no es
+  // señal real, es ruido de un modelo mal calibrado en ese mercado. Por eso
+  // la penalización es fuerte (0.7) y separada de las demás, no se combina
+  // proporcionalmente con ellas.
+  const lowConfidenceMarket = market === "O/U" || market === "BTTS";
+  const marketPenalty = lowConfidenceMarket ? 0.7 : 0;
+
+  const behaviorPenalty = Math.min(1, motivationPenalty * 0.4 + rotationPenalty * 0.4 + spreadPenalty * 0.2);
+  const totalPenalty = Math.min(1, behaviorPenalty + marketPenalty - behaviorPenalty * marketPenalty);
 
   // Score final: el edge crudo, ajustado hacia abajo por la incertidumbre
   // detectada. Nunca se ajusta hacia arriba — las penalizaciones solo
@@ -42,9 +53,11 @@ export function scoreCandidate(candidate, motivationHome, motivationAway, rotati
     motivationPenalty,
     rotationPenalty,
     spreadPenalty,
+    marketPenalty,
     totalPenalty,
     adjustedConfidence,
     warnings: [
+      ...(lowConfidenceMarket ? [`Mercado de baja confianza validada (Over/Under y BTTS no superan la tasa base en backtest real) — edge crudo aquí no es señal fuerte.`] : []),
       ...(motivationPenalty > 0 ? [`Hay un equipo sin presión real en este partido (clasificado o eliminado matemáticamente).`] : []),
       ...(rotationPenalty >= 1 ? [`Rotación fuerte detectada — alineación muy distinta a la habitual.`] : []),
       ...(rotationPenalty > 0 && rotationPenalty < 1 ? [`Rotación leve detectada.`] : []),
