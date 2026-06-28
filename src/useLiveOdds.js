@@ -12,7 +12,10 @@ export function useLiveOdds(sportKey = "soccer_fifa_world_cup", markets = "h2h,t
     fetch(`/api/odds?sport=${encodeURIComponent(sportKey)}&markets=${encodeURIComponent(markets)}`)
       .then(res => res.json())
       .then(json => {
-        if (json.error) throw new Error(json.error);
+        if (json.error) {
+          const msg = json.detail ? `${json.error} — ${json.detail}` : json.error;
+          throw new Error(msg);
+        }
         setState({ events: json.data || [], quota: json.quota || null, loading: false, error: null });
       })
       .catch(err => setState({ events: [], quota: null, loading: false, error: err.message }));

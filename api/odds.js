@@ -17,20 +17,25 @@ export default async function handler(req, res) {
   // endpoint"). Para BTTS habría que usar /events/{id}/odds por partido
   // individual (más caro en cuota); por ahora el default solo trae h2h y
   // totals, que es lo que realmente soporta este endpoint.
-  const { sport = "soccer_fifa_world_cup", markets = "h2h,totals", regions = "us" } = req.query;
+  // regions: eu,us,uk para capturar libros europeos (bet365, Pinnacle, etc.)
+  // que son los que más cubren el Mundial — solo us tiene cobertura más limitada.
+  const { sport = "soccer_fifa_world_cup", markets = "h2h,totals", regions = "eu,us,uk" } = req.query;
 
   try {
     const url = `https://api.the-odds-api.com/v4/sports/${sport}/odds/?apiKey=${apiKey}&regions=${regions}&markets=${markets}&oddsFormat=decimal`;
     const response = await fetch(url);
 
-    // The Odds API manda el remanente de cuota en headers; lo reenviamos
-    // para que el frontend pueda mostrarte cuánto te queda del plan de pago.
     const remaining = response.headers.get("x-requests-remaining");
     const used = response.headers.get("x-requests-used");
 
     if (!response.ok) {
       const text = await response.text();
-      return res.status(response.status).json({ error: `The Odds API respondió ${response.status}`, detail: text });
+      // Devolvemos el detail completo para poder diagnosticar
+      return res.status(response.status).json({
+        error: `The Odds API respondió ${response.status}`,
+        detail: text,
+        debug: { sport, markets, regions, status: response.status },
+      });
     }
 
     const data = await response.json();
