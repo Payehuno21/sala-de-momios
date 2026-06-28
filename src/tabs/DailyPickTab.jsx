@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useLiveOdds, summarizeBookOdds } from "../useLiveOdds.js";
 import { eloToLambdas, scoreMatrix, probsFromMatrix, GROUPS, buildStandings, impliedProb, ISO } from "../engine.js";
 import { computeMotivation } from "../motivation.js";
@@ -108,25 +108,52 @@ function EdgeBar({ ev }) {
   );
 }
 
-function MarketRow({ label, modelProb, bestOdds, ev }) {
+function MarketRow({ label, modelProb, bestOdds, ev, onAdd, canAdd, justAdded }) {
+  const recommended = ev > 0.02;
   return (
-    <div className="grid items-center gap-x-3 py-[5px]" style={{ gridTemplateColumns: "1fr 46px 46px 1fr" }}>
-      <span className="text-[12.5px] text-paper truncate">{label}</span>
+    <div className={`grid items-center gap-x-2 py-[5px] rounded-lg ${recommended ? "bg-win/[0.06] px-1.5 -mx-1.5" : ""}`}
+      style={{ gridTemplateColumns: "1fr 44px 44px 1fr 64px" }}>
+      <span className="text-[12.5px] text-paper truncate flex items-center gap-1.5">
+        {recommended && <span className="text-win text-[10px] flex-shrink-0">★</span>}
+        {label}
+      </span>
       <span className="text-[11px] text-textDim font-mono tabular-nums text-right">{pct(modelProb)}</span>
       <span className="text-[11px] text-paper font-mono tabular-nums text-right font-semibold">
         {bestOdds ? bestOdds.toFixed(2) : "—"}
       </span>
       <EdgeBar ev={ev} />
+      {onAdd && (
+        <button
+          onClick={onAdd}
+          disabled={!canAdd || !bestOdds}
+          className={`text-[9.5px] font-bold px-1.5 py-1 rounded-lg border whitespace-nowrap disabled:opacity-25 transition-colors ${
+            justAdded ? "bg-win text-ink border-win" : "bg-panel2 text-paper border-line hover:border-violet/50"
+          }`}
+        >
+          {justAdded ? "✓" : "+ Bitácora"}
+        </button>
+      )}
     </div>
   );
 }
-
-function MatchCard({ matchData, rank }) {
+function MatchCard({ matchData, rank, onAddBet }) {
   const { home, away, candidates, bookCount } = matchData;
   const mlRows = candidates.filter(c => c.market === "ML");
   const ouRows = candidates.filter(c => c.market === "O/U");
   const bestEv = candidates.length ? Math.max(...candidates.map(c => c.ev)) : 0;
   const allWarnings = [...new Set(candidates.flatMap(c => c.warnings))];
+
+  const [stake, setStake] = useState("10");
+  const [addedKey, setAddedKey] = useState(null);
+
+  const handleAdd = (candidate) => {
+    const amount = parseFloat(stake);
+    if (!amount || amount <= 0 || !onAddBet) return;
+    onAddBet({ match: matchData.match, market: candidate.label, odds: candidate.bestOdds, stake: amount, status: "pending", id: Date.now() });
+    const key = `${candidate.market}-${candidate.label}`;
+    setAddedKey(key);
+    setTimeout(() => setAddedKey(null), 1800);
+  };
 
   const rankColors = [
     "bg-win/15 text-win border-win/30",
@@ -164,22 +191,40 @@ function MatchCard({ matchData, rank }) {
         </div>
       </div>
 
+      {/* Monto a apostar (compartido para todas las filas de esta tarjeta) */}
+      {onAddBet && (
+        <div className="flex items-center gap-2 px-4 pt-2.5">
+          <span className="text-[10px] text-textDim/60 font-mono">Monto $</span>
+          <input
+            type="number" inputMode="decimal" value={stake} onChange={e => setStake(e.target.value)}
+            className="w-16 px-1.5 py-0.5 text-[11px] font-mono bg-panel2 border border-line rounded text-paper"
+          />
+        </div>
+      )}
+
       {/* Markets body */}
       <div className="px-4 py-3 space-y-1">
         {/* Column labels */}
-        <div className="grid gap-x-3 text-[8.5px] uppercase tracking-[0.12em] text-textDim/40 font-mono pb-1 border-b border-line/40"
-          style={{ gridTemplateColumns: "1fr 46px 46px 1fr" }}>
+        <div className="grid gap-x-2 text-[8.5px] uppercase tracking-[0.12em] text-textDim/40 font-mono pb-1 border-b border-line/40"
+          style={{ gridTemplateColumns: "1fr 44px 44px 1fr 64px" }}>
           <span>Resultado</span>
           <span className="text-right">Modelo</span>
           <span className="text-right">Momio</span>
           <span className="pl-1">Edge</span>
+          <span></span>
         </div>
 
         {/* 1X2 */}
         {mlRows.length > 0 && (
           <div>
             <div className="text-[8px] uppercase tracking-[0.15em] text-textDim/35 font-mono pt-1.5 pb-0.5">1X2</div>
-            {mlRows.map((c, i) => <MarketRow key={i} {...c} />)}
+            {mlRows.map((c, i) => (
+              <MarketRow key={i} {...c}
+                onAdd={onAddBet ? () => handleAdd(c) : null}
+                canAdd={!!stake && parseFloat(stake) > 0}
+                justAdded={addedKey === `${c.market}-${c.label}`}
+              />
+            ))}
           </div>
         )}
 
@@ -190,7 +235,13 @@ function MatchCard({ matchData, rank }) {
               <span className="text-[8px] uppercase tracking-[0.15em] text-textDim/35 font-mono">Goles</span>
               <span className="text-[7px] uppercase tracking-wider px-1.5 py-[2px] rounded bg-accentSoft text-violet/70 border border-lineGlow/30">señal débil</span>
             </div>
-            {ouRows.map((c, i) => <MarketRow key={i} {...c} />)}
+            {ouRows.map((c, i) => (
+              <MarketRow key={i} {...c}
+                onAdd={onAddBet ? () => handleAdd(c) : null}
+                canAdd={!!stake && parseFloat(stake) > 0}
+                justAdded={addedKey === `${c.market}-${c.label}`}
+              />
+            ))}
           </div>
         )}
 
@@ -209,8 +260,7 @@ function MatchCard({ matchData, rank }) {
     </div>
   );
 }
-
-function FeaturedPickCard({ pick }) {
+function FeaturedPickCard({ pick, onAddBet }) {
   const [home, away] = pick.match.split(" vs ");
   const conf = pick.adjustedConfidence;
   const strengthLabel = conf >= 0.12 ? "ALTA" : conf >= 0.06 ? "MEDIA" : "BAJA";
@@ -219,6 +269,17 @@ function FeaturedPickCard({ pick }) {
     : conf >= 0.06
     ? "border-cyan/30 bg-cyan/10 text-cyan"
     : "border-line bg-white/5 text-textDim";
+
+  const [stake, setStake] = useState("10");
+  const [added, setAdded] = useState(false);
+
+  const handleAdd = () => {
+    const amount = parseFloat(stake);
+    if (!amount || amount <= 0 || !onAddBet) return;
+    onAddBet({ match: pick.match, market: pick.label, odds: pick.bestOdds, stake: amount, status: "pending", id: Date.now() });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
 
   return (
     <div className="glass-gold rounded-2xl overflow-hidden relative animate-gold-pulse">
@@ -264,11 +325,12 @@ function FeaturedPickCard({ pick }) {
           <Flag team={away} className="text-xl" />
         </div>
 
-        {/* Market badge */}
-        <div className="inline-flex items-center gap-2 mb-5 px-3 py-1.5 rounded-full glass border border-line">
-          <span className="text-[9px] uppercase tracking-wider text-textDim font-mono">{pick.market}</span>
-          <span className="w-1 h-1 rounded-full bg-textDim/30" />
-          <span className="text-[12px] font-semibold text-paper">{pick.label}</span>
+        {/* Market badge — qué apostar, explícito y grande */}
+        <div className="flex items-center gap-2 mb-5">
+          <span className="text-[9px] uppercase tracking-wider text-gold font-mono px-2 py-1 rounded-lg border border-gold/30 bg-gold/10 font-bold">
+            {pick.market === "ML" ? "RESULTADO" : pick.market === "O/U" ? "GOLES" : pick.market}
+          </span>
+          <span className="text-[15px] font-bold text-paper">→ {pick.label}</span>
         </div>
 
         {/* Big edge number */}
@@ -313,12 +375,30 @@ function FeaturedPickCard({ pick }) {
             <span className="text-[10.5px] text-win/70">Sin advertencias detectadas en este mercado</span>
           </div>
         )}
+
+        {onAddBet && (
+          <div className="flex items-center gap-2.5 mt-5 pt-4 border-t border-white/10">
+            <span className="text-[11px] text-textDim font-mono">Monto $</span>
+            <input
+              type="number" inputMode="decimal" value={stake} onChange={e => setStake(e.target.value)}
+              className="w-20 px-2 py-1.5 text-[13px] font-mono bg-panel2 border border-line rounded-lg text-paper"
+            />
+            <button
+              onClick={handleAdd}
+              disabled={!stake || parseFloat(stake) <= 0}
+              className={`flex-1 py-2 text-[12.5px] font-bold rounded-xl transition-colors disabled:opacity-30 ${
+                added ? "bg-win text-ink" : "bg-gold text-ink hover:opacity-90"
+              }`}
+            >
+              {added ? "✓ Agregada a la bitácora" : "+ Agregar a la bitácora"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
 }
-
-export function DailyPickTab({ eloTable, results }) {
+export function DailyPickTab({ eloTable, results, onAddBet }) {
   const { events, quota, loading, error, refresh } = useLiveOdds("soccer_fifa_world_cup", "h2h,totals");
 
   const { rankedCandidates, matchGroups } = useMemo(() => {
@@ -440,7 +520,7 @@ export function DailyPickTab({ eloTable, results }) {
       )}
 
       {/* Featured pick hero */}
-      {!loading && topPick && <FeaturedPickCard pick={topPick} />}
+      {!loading && topPick && <FeaturedPickCard pick={topPick} onAddBet={onAddBet} />}
 
       {/* Market grid by match */}
       {!loading && matchGroups.length > 0 && (
@@ -457,7 +537,7 @@ export function DailyPickTab({ eloTable, results }) {
 
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
             {matchGroups.map((m, i) => (
-              <MatchCard key={m.match} matchData={m} rank={i + 1} />
+              <MatchCard key={m.match} matchData={m} rank={i + 1} onAddBet={onAddBet} />
             ))}
           </div>
         </div>
