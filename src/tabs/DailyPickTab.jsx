@@ -4,6 +4,55 @@ import { eloToLambdas, scoreMatrix, probsFromMatrix, GROUPS, buildStandings, imp
 import { computeMotivation } from "../motivation.js";
 import { scoreCandidate, rankDailyCandidates } from "../confidenceEngine.js";
 
+// The Odds API manda nombres en inglés; el engine usa nombres en español.
+// Este mapa normaliza antes de cualquier lookup en eloTable / GROUPS.
+const API_TO_ENGINE = {
+  "Spain": "Espana",
+  "England": "Inglaterra",
+  "France": "Francia",
+  "Germany": "Alemania",
+  "Brazil": "Brasil",
+  "Netherlands": "Paises Bajos",
+  "Belgium": "Belgica",
+  "Croatia": "Croacia",
+  "Morocco": "Marruecos",
+  "United States": "Estados Unidos",
+  "USA": "Estados Unidos",
+  "Japan": "Japon",
+  "Switzerland": "Suiza",
+  "Turkey": "Turquia",
+  "South Korea": "Corea del Sur",
+  "Korea Republic": "Corea del Sur",
+  "Algeria": "Argelia",
+  "Egypt": "Egipto",
+  "Norway": "Noruega",
+  "Ivory Coast": "Costa de Marfil",
+  "Côte d'Ivoire": "Costa de Marfil",
+  "Cote d'Ivoire": "Costa de Marfil",
+  "Sweden": "Suecia",
+  "Czech Republic": "Chequia",
+  "Czechia": "Chequia",
+  "Scotland": "Escocia",
+  "Tunisia": "Tunez",
+  "DR Congo": "Rep. Dem. Congo",
+  "Congo DR": "Rep. Dem. Congo",
+  "Democratic Republic of Congo": "Rep. Dem. Congo",
+  "Qatar": "Catar",
+  "Iraq": "Irak",
+  "South Africa": "Sudafrica",
+  "Saudi Arabia": "Arabia Saudita",
+  "Jordan": "Jordania",
+  "Bosnia and Herzegovina": "Bosnia y Herzegovina",
+  "Bosnia & Herzegovina": "Bosnia y Herzegovina",
+  "Cape Verde": "Cabo Verde",
+  "Curacao": "Curazao",
+  "New Zealand": "Nueva Zelanda",
+};
+
+function normalizeTeam(name) {
+  return API_TO_ENGINE[name] ?? name;
+}
+
 function pct(x) { return (x * 100).toFixed(1) + "%"; }
 
 function evColor(ev) {
@@ -277,7 +326,15 @@ export function DailyPickTab({ eloTable, results }) {
     const matchMap = {};
 
     for (const event of events) {
-      const { home_team: home, away_team: away } = event;
+      // homeApi/awayApi: nombre que manda The Odds API (inglés) — para buscar
+      //   outcomes en bookOdds (que se indexan con ese mismo nombre)
+      // home/away: nombre normalizado al español del engine — para eloTable,
+      //   GROUPS, buildStandings, computeMotivation y display en el UI
+      const homeApi = event.home_team;
+      const awayApi = event.away_team;
+      const home = normalizeTeam(homeApi);
+      const away = normalizeTeam(awayApi);
+
       const eh = eloTable[home] ?? 1700, ea = eloTable[away] ?? 1700;
       const { lambdaHome, lambdaAway } = eloToLambdas(eh, ea, true);
       const probs = probsFromMatrix(scoreMatrix(lambdaHome, lambdaAway));
@@ -290,9 +347,9 @@ export function DailyPickTab({ eloTable, results }) {
       const motivationAway = groupAway ? computeMotivation(standingsAway, away, 1) : { state: "desconocido" };
 
       const marketDefs = [
-        { market: "ML", label: `Gana ${home}`, modelProb: probs.pH, bookKey: ["h2h", home] },
+        { market: "ML", label: `Gana ${home}`, modelProb: probs.pH, bookKey: ["h2h", homeApi] },
         { market: "ML", label: "Empate", modelProb: probs.pD, bookKey: ["h2h", "Draw"] },
-        { market: "ML", label: `Gana ${away}`, modelProb: probs.pA, bookKey: ["h2h", away] },
+        { market: "ML", label: `Gana ${away}`, modelProb: probs.pA, bookKey: ["h2h", awayApi] },
         { market: "O/U", label: "Más de 2.5", modelProb: probs.over25, bookKey: ["totals", "Over"] },
         { market: "O/U", label: "Menos de 2.5", modelProb: probs.under25, bookKey: ["totals", "Under"] },
       ];
