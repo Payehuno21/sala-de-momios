@@ -396,6 +396,7 @@ export function DailyPickTab({ eloTable, results }) {
             <div className="text-[11px] uppercase tracking-[0.15em] text-paper font-bold font-mono">
               Mercados en vivo · Mundial 2026
             </div>
+            <div className="text-[9px] text-textDim/50 font-mono">motor v3.1 · Elos calibrados</div>
             {quota && (
               <div className="text-[10px] text-textDim font-mono">
                 The Odds API · {quota.remaining} consultas restantes
