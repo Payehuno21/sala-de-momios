@@ -11,7 +11,13 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "ODDS_API_KEY no configurada en el servidor. Agrégala en Vercel → Settings → Environment Variables." });
   }
 
-  const { sport = "soccer_fifa_world_cup", markets = "h2h,totals,btts", regions = "us" } = req.query;
+  // IMPORTANTE: el endpoint principal /odds solo acepta "featured markets"
+  // (h2h, spreads, totals). btts NO es un featured market — pedirlo aquí
+  // causa un error 422 de The Odds API ("market inválido para este
+  // endpoint"). Para BTTS habría que usar /events/{id}/odds por partido
+  // individual (más caro en cuota); por ahora el default solo trae h2h y
+  // totals, que es lo que realmente soporta este endpoint.
+  const { sport = "soccer_fifa_world_cup", markets = "h2h,totals", regions = "us" } = req.query;
 
   try {
     const url = `https://api.the-odds-api.com/v4/sports/${sport}/odds/?apiKey=${apiKey}&regions=${regions}&markets=${markets}&oddsFormat=decimal`;

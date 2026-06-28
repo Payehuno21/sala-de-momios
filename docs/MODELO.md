@@ -10,6 +10,14 @@ Se agregó una nueva pestaña "Hoy" que combina:
 
 **Decisión de diseño explícita**: la app NUNCA usa la palabra "lock" ni promete una apuesta segura. La pestaña "Hoy" muestra "mayor confianza relativa" — el candidato con menos señales de incertidumbre detectadas entre los disponibles ese día, siempre junto a su edge crudo y sus advertencias visibles.
 
+## Corrección del 27 de junio — Error 422 en The Odds API
+
+Al conectar la key real del usuario (plan Professional), `/api/odds` devolvía error 422. Diagnóstico real:
+- **No era problema de plan**: según la documentación oficial confirmada de the-odds-api.com, todos los planes de pago dan acceso a todos los deportes, incluyendo el Mundial 2026 y Liga MX/MLS.
+- **Causa real**: el código pedía `markets=h2h,totals,btts` al endpoint principal `/odds`, pero BTTS no es un "featured market" — ese endpoint solo acepta h2h, spreads y totals. BTTS solo se puede pedir vía `/events/{id}/odds` por partido individual (consume más cuota).
+- **Corrección**: se quitó `btts` del default de `useLiveOdds` y de la llamada en `DailyPickTab`. Los candidatos de BTTS en la pestaña "Hoy" simplemente no aparecerán hasta que se implemente la consulta por evento individual — esto es una limitación conocida, no un bug oculto.
+- Nota aparte: durante el diagnóstico se confundió brevemente con un sitio de nombre casi idéntico (`theoddsapi.com`, sin guiones) que es un producto distinto con su propia estructura de planes — el usuario confirmó que su cuenta es en `the-odds-api.com` (con guiones), que es al que apunta el código real.
+
 **Pendiente de verificación real** (no se puede confirmar sin ejecutar contra las API keys reales del usuario):
 - Los sport_keys exactos de Liga MX (`soccer_mexico_ligamx`) y MLS (`soccer_usa_mls`) en The Odds API.
 - Si el market key `btts` existe tal cual en la respuesta real, o si The Odds API lo expone bajo otro nombre.

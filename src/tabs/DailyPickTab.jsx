@@ -14,7 +14,7 @@ function findGroupOf(team) {
 }
 
 export function DailyPickTab({ eloTable, results }) {
-  const { events, quota, loading, error, refresh } = useLiveOdds("soccer_fifa_world_cup", "h2h,totals,btts");
+  const { events, quota, loading, error, refresh } = useLiveOdds("soccer_fifa_world_cup", "h2h,totals");
 
   const candidates = useMemo(() => {
     const list = [];
@@ -31,6 +31,12 @@ export function DailyPickTab({ eloTable, results }) {
       const motivationHome = groupHome ? computeMotivation(standingsHome, home, 1) : { state: "desconocido" };
       const motivationAway = groupAway ? computeMotivation(standingsAway, away, 1) : { state: "desconocido" };
 
+      // Nota: BTTS no es un "featured market" de The Odds API — el endpoint
+      // principal no lo trae (causaría error 422). Estos 2 candidatos
+      // simplemente no encontrarán odds y se saltan en el loop de abajo.
+      // Para tener BTTS en vivo habría que consultar /events/{id}/odds por
+      // partido individual, lo cual cuesta más cuota — pendiente de decidir
+      // si vale la pena para el volumen de partidos del día.
       const marketDefs = [
         { market: "ML", label: `Gana ${home}`, modelProb: probs.pH, bookKey: ["h2h", home] },
         { market: "ML", label: "Empate", modelProb: probs.pD, bookKey: ["h2h", "Draw"] },

@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 
 // Llama a /api/odds (nuestra serverless function, que oculta la key real
 // de The Odds API). Nunca llama a The Odds API directo desde el navegador.
-export function useLiveOdds(sportKey = "soccer_fifa_world_cup", markets = "h2h,totals,btts") {
+// markets por defecto: solo "featured markets" (h2h, totals) — btts no es
+// un featured market y el endpoint principal lo rechaza con error 422.
+export function useLiveOdds(sportKey = "soccer_fifa_world_cup", markets = "h2h,totals") {
   const [state, setState] = useState({ events: [], quota: null, loading: true, error: null });
 
   const refresh = useCallback(() => {
