@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-06-28T20:42:34.462Z",
+  "fetchedAt": "2026-06-28T21:46:35.248Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 72,
+  "playedMatches": 73,
   "matches": [
     {
       "matchNum": null,
@@ -1094,9 +1094,9 @@
       "away": "Canada",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 1,
       "venue": "Los Angeles (Inglewood)"
     },
     {
