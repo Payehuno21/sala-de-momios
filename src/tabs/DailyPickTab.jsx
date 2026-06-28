@@ -108,13 +108,12 @@ function EdgeBar({ ev }) {
   );
 }
 
-function MarketRow({ label, modelProb, bestOdds, ev, onAdd, canAdd, justAdded }) {
-  const recommended = ev > 0.02;
+function MarketRow({ label, modelProb, bestOdds, ev, onAdd, canAdd, justAdded, isBest }) {
   return (
-    <div className={`grid items-center gap-x-2 py-[5px] rounded-lg ${recommended ? "bg-win/[0.06] px-1.5 -mx-1.5" : ""}`}
+    <div className={`grid items-center gap-x-2 py-[5px] rounded-lg ${isBest ? "bg-win/[0.06] px-1.5 -mx-1.5" : ""}`}
       style={{ gridTemplateColumns: "1fr 44px 44px 1fr 64px" }}>
       <span className="text-[12.5px] text-paper truncate flex items-center gap-1.5">
-        {recommended && <span className="text-win text-[10px] flex-shrink-0">★</span>}
+        {isBest && <span className="text-win text-[10px] flex-shrink-0">★</span>}
         {label}
       </span>
       <span className="text-[11px] text-textDim font-mono tabular-nums text-right">{pct(modelProb)}</span>
@@ -136,11 +135,19 @@ function MarketRow({ label, modelProb, bestOdds, ev, onAdd, canAdd, justAdded })
     </div>
   );
 }
+
 function MatchCard({ matchData, rank, onAddBet }) {
   const { home, away, candidates, bookCount } = matchData;
   const mlRows = candidates.filter(c => c.market === "ML");
   const ouRows = candidates.filter(c => c.market === "O/U");
   const bestEv = candidates.length ? Math.max(...candidates.map(c => c.ev)) : 0;
+  // Solo UNA fila puede ser "la mejor" en todo el partido — el candidato con
+  // mayor edge positivo. Si el mejor edge no es positivo, no se marca nada
+  // (no recomendamos apostar cuando no hay valor real detectado).
+  const bestCandidate = bestEv > 0.02
+    ? candidates.reduce((best, c) => (c.ev > best.ev ? c : best), candidates[0])
+    : null;
+  const isBestRow = (c) => bestCandidate && c.label === bestCandidate.label && c.market === bestCandidate.market;
   const allWarnings = [...new Set(candidates.flatMap(c => c.warnings))];
 
   const [stake, setStake] = useState("10");
@@ -220,6 +227,7 @@ function MatchCard({ matchData, rank, onAddBet }) {
             <div className="text-[8px] uppercase tracking-[0.15em] text-textDim/35 font-mono pt-1.5 pb-0.5">1X2</div>
             {mlRows.map((c, i) => (
               <MarketRow key={i} {...c}
+                isBest={isBestRow(c)}
                 onAdd={onAddBet ? () => handleAdd(c) : null}
                 canAdd={!!stake && parseFloat(stake) > 0}
                 justAdded={addedKey === `${c.market}-${c.label}`}
@@ -237,6 +245,7 @@ function MatchCard({ matchData, rank, onAddBet }) {
             </div>
             {ouRows.map((c, i) => (
               <MarketRow key={i} {...c}
+                isBest={isBestRow(c)}
                 onAdd={onAddBet ? () => handleAdd(c) : null}
                 canAdd={!!stake && parseFloat(stake) > 0}
                 justAdded={addedKey === `${c.market}-${c.label}`}
@@ -260,6 +269,7 @@ function MatchCard({ matchData, rank, onAddBet }) {
     </div>
   );
 }
+
 function FeaturedPickCard({ pick, onAddBet }) {
   const [home, away] = pick.match.split(" vs ");
   const conf = pick.adjustedConfidence;
@@ -398,6 +408,7 @@ function FeaturedPickCard({ pick, onAddBet }) {
     </div>
   );
 }
+
 export function DailyPickTab({ eloTable, results, onAddBet }) {
   const { events, quota, loading, error, refresh } = useLiveOdds("soccer_fifa_world_cup", "h2h,totals");
 
