@@ -1,5 +1,17 @@
 # Documentación del modelo — honesta, sin maquillaje
 
+## Fase 4 (29 de junio) — Calibración basada en regla oficial de Elo, no en casos sueltos
+
+Tras encontrar el mismo patrón de error 3 veces seguidas (modelo demasiado extremo con el favorito, en Inglaterra-Ghana, Costa de Marfil-Curazao, y Brasil-Japón — siempre en la misma dirección), se diagnosticó que **el exponente 2.5 nunca estuvo bien calibrado** — se había ajustado contra 1-2 casos sueltos en sesiones anteriores, lo cual es estadísticamente insuficiente.
+
+**Corrección real**: se encontró la regla matemática oficial del creador de eloratings.net (publicada en footballratings.org/about): una diferencia de 100 puntos de Elo equivale a 64% de probabilidad de victoria en cancha neutral, 200 puntos a 76%, 400 puntos a 91%. Se probó el exponente de `eloToLambdas` contra estos 3 puntos de control oficiales (no contra casos de mercado, que pueden tener ruido) y se encontró que **exponente 2.0** los reproduce con menos de 2 puntos porcentuales de error en los tres, mientras que 2.5 sobreestimaba sistemáticamente.
+
+También se corrigieron 8 valores de `BASE_ELO` con datos confirmados de footballratings.org al 27-29 de junio de 2026 (España, Argentina, Francia, Inglaterra, Brasil, Colombia, Portugal, Países Bajos), y Japón se ajustó de 1925 a 1880 tras validar contra el consenso real de mercado de Brasil-Japón.
+
+**Resultado en backtest**: accuracy de 1X2 se mantuvo en 50% (n=30, dentro del ruido esperado), pero el LogLoss mejoró de 1.262 a 1.172 — el modelo es menos sobreconfiado en sus errores.
+
+**Por qué esta corrección es más confiable que las 2 anteriores**: las correcciones de exponente del 24 y 27 de junio se basaron en 1-3 casos de mercado, lo cual es una muestra mínima. Esta corrección se basa en una regla matemática publicada por el creador del propio sistema Elo, derivada de 125+ años de partidos internacionales — es una base de calibración ortogonal a nuestros propios casos de validación, no una coincidencia ajustada a posteriori.
+
 ## Fase 3 (25 de junio) — Motor multi-capa + APIs reales
 
 Se agregó una nueva pestaña "Hoy" que combina:
