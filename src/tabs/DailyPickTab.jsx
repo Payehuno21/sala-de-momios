@@ -140,12 +140,14 @@ function MatchCard({ matchData, rank, onAddBet }) {
   const { home, away, candidates, bookCount } = matchData;
   const mlRows = candidates.filter(c => c.market === "ML");
   const ouRows = candidates.filter(c => c.market === "O/U");
-  const bestEv = candidates.length ? Math.max(...candidates.map(c => c.ev)) : 0;
-  // Solo UNA fila puede ser "la mejor" en todo el partido — el candidato con
-  // mayor edge positivo. Si el mejor edge no es positivo, no se marca nada
-  // (no recomendamos apostar cuando no hay valor real detectado).
-  const bestCandidate = bestEv > 0.02
-    ? candidates.reduce((best, c) => (c.ev > best.ev ? c : best), candidates[0])
+  // La estrella ★ solo puede caer en ML — mismo criterio estructural que
+  // rankDailyCandidates en confidenceEngine.js. O/U nunca compite por esta
+  // marca, sin importar qué tan grande sea su edge crudo aparente (ver
+  // docs/MODELO.md: ese mercado no tiene señal validada).
+  const bestMlEv = mlRows.length ? Math.max(...mlRows.map(c => c.ev)) : 0;
+  const bestEv = bestMlEv; // se usa para el badge "max +X%" del header de la tarjeta
+  const bestCandidate = bestMlEv > 0.02
+    ? mlRows.reduce((best, c) => (c.ev > best.ev ? c : best), mlRows[0])
     : null;
   const isBestRow = (c) => bestCandidate && c.label === bestCandidate.label && c.market === bestCandidate.market;
   const allWarnings = [...new Set(candidates.flatMap(c => c.warnings))];
@@ -467,8 +469,14 @@ export function DailyPickTab({ eloTable, results, onAddBet }) {
     const matchGroups = Object.values(matchMap)
       .filter(m => m.candidates.length > 0)
       .sort((a, b) => {
-        const bestA = Math.max(...a.candidates.map(c => c.ev));
-        const bestB = Math.max(...b.candidates.map(c => c.ev));
+        // Mismo criterio estructural: solo ML define el orden de las
+        // tarjetas, para que un O/U con edge aparente grande no empuje un
+        // partido arriba en la lista cuando su único valor real es de baja
+        // confianza validada.
+        const mlA = a.candidates.filter(c => c.market === "ML");
+        const mlB = b.candidates.filter(c => c.market === "ML");
+        const bestA = mlA.length ? Math.max(...mlA.map(c => c.ev)) : -Infinity;
+        const bestB = mlB.length ? Math.max(...mlB.map(c => c.ev)) : -Infinity;
         return bestB - bestA;
       });
 
