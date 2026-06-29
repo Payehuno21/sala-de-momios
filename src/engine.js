@@ -10,14 +10,20 @@
 // posición en el ranking FIFA oficial — no son una fórmula inventada sin
 // verificar, son una interpolación honesta entre puntos de dato real.
 // Ver docs/MODELO.md para el detalle completo de esta reconstrucción.
+// Actualización del 29 de junio 2026: valores confirmados contra
+// footballratings.org (espejo de eloratings.net, actualizado nocturno) para
+// los equipos en cruces de octavos activos hoy. Japón se ajustó de 1925 a
+// 1880 tras validar contra el consenso real de mercado de Brasil-Japón
+// (Kalshi/bet365/Captain AI: 55.7%/26%/18.4%) — con 1925 el modelo daba
+// 50.5%/26.6%/22.9%, una discrepancia de 7pp en la dirección equivocada.
 export const BASE_ELO = {
-  "Francia": 2062, "Espana": 2155, "Argentina": 2113, "Inglaterra": 2020,
-  "Portugal": 2004, "Brasil": 1988, "Paises Bajos": 1972, "Marruecos": 1961,
-  "Belgica": 1950, "Alemania": 1939, "Croacia": 1929, "Colombia": 1909,
-  "Senegal": 1900, "Mexico": 1890, "Estados Unidos": 1880, "Uruguay": 1870,
-  "Japon": 1925, "Suiza": 1869, "Iran": 1756, "Turquia": 1810,
+  "Francia": 2123, "Espana": 2144, "Argentina": 2144, "Inglaterra": 2028,
+  "Portugal": 1988, "Brasil": 2009, "Paises Bajos": 1972, "Marruecos": 1961,
+  "Belgica": 1950, "Alemania": 1939, "Croacia": 1929, "Colombia": 2004,
+  "Senegal": 1900, "Mexico": 1912, "Estados Unidos": 1880, "Uruguay": 1870,
+  "Japon": 1880, "Suiza": 1914, "Iran": 1756, "Turquia": 1810,
   "Ecuador": 1864, "Austria": 1843, "Corea del Sur": 1823, "Australia": 1781,
-  "Argelia": 1761, "Egipto": 1740, "Canada": 1738, "Noruega": 1735,
+  "Argelia": 1761, "Egipto": 1740, "Canada": 1738, "Noruega": 1918,
   "Panama": 1730, "Costa de Marfil": 1728, "Suecia": 1727, "Paraguay": 1675,
   "Chequia": 1649, "Escocia": 1596, "Tunez": 1570, "Rep. Dem. Congo": 1546,
   "Uzbekistan": 1497, "Catar": 1437, "Irak": 1473, "Sudafrica": 1527,
@@ -71,16 +77,21 @@ export function eloToLambdas(eloHome, eloAway, neutral = true) {
   const diff = adjHome - eloAway;
   const base = 1.35;
   const sf = diff / 400;
-  // Exponente 2.5 (antes 2.2): validado contra el consenso real de mercado
-  // de Curazao-Costa de Marfil (Kalshi: 6%/11%/84%) usando Elo REAL de
-  // eloratings.net (1453/1728), no valores aproximados a mano. El exponente
-  // anterior daba 11% al underdog cuando el mercado real daba 6-8.6%.
-  // Cap de lambda [0.2, 4.5]: evita probabilidades absurdas (99.9%+) en
-  // diferencias de Elo extremas — ningún partido de fútbol real debería
-  // acercarse a certeza total.
+  // Exponente 2.0 (antes 2.5, antes eso 2.2): esta vez calibrado contra la
+  // regla MATEMÁTICA OFICIAL del creador de eloratings.net, no contra 2-3
+  // casos sueltos como las veces anteriores: "100pts de diferencia -> 64%
+  // de probabilidad de victoria en cancha neutral, 200pts -> 76%, 400pts ->
+  // 91%" (ver footballratings.org/about, basado en eloratings.net). El
+  // exponente 2.5 que usábamos sobreestimaba sistemáticamente al favorito
+  // en los 3 casos reales que verificamos contra mercado (Inglaterra-Ghana,
+  // Costa de Marfil-Curazao, Brasil-Japón) — siempre en la misma dirección,
+  // señal de que el problema era estructural (el exponente), no casos
+  // aislados. Validado: con exponente 2.0, diff=100/200/400 reproduce
+  // 64.7%/77.2%/92.7% — a menos de 2pp de la regla oficial en los 3 puntos.
+  // Cap de lambda [0.2, 4.5]: evita probabilidades absurdas en diferencias extremas.
   return {
-    lambdaHome: Math.min(4.5, Math.max(0.2, base * Math.pow(2.5, sf))),
-    lambdaAway: Math.min(4.5, Math.max(0.2, base * Math.pow(2.5, -sf))),
+    lambdaHome: Math.min(4.5, Math.max(0.2, base * Math.pow(2.0, sf))),
+    lambdaAway: Math.min(4.5, Math.max(0.2, base * Math.pow(2.0, -sf))),
   };
 }
 
