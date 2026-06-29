@@ -70,8 +70,16 @@ export function scoreCandidate(candidate, motivationHome, motivationAway, rotati
 // mercados) y devuelve el de mayor confianza ajustada. Esto reemplaza la
 // idea de "lock" por "mayor confianza relativa entre lo disponible hoy" —
 // siempre con su nivel de incertidumbre visible, nunca como certeza.
+// Compara los candidatos del día para elegir "mejor pick" y la estrella ★
+// por partido. DECISIÓN ESTRUCTURAL (no solo penalización numérica): los
+// mercados de baja confianza validada (O/U, BTTS) quedan EXCLUIDOS de este
+// ranking — no compiten contra ML por más grande que sea su edge crudo
+// aparente. Probamos que ninguna penalización numérica razonable bastaba
+// para evitar que Over/Under ganara cuando su edge crudo aparente es
+// sistemáticamente más grande que el de ML (ver docs/MODELO.md).
 export function rankDailyCandidates(allCandidates) {
   return [...allCandidates]
-    .filter(c => c.ev > 0) // solo candidatos con edge positivo entran a la comparación
+    .filter(c => c.market === "ML") // únicos mercados con señal validada
+    .filter(c => c.ev > 0)
     .sort((a, b) => b.adjustedConfidence - a.adjustedConfidence);
 }
