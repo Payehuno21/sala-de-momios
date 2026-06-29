@@ -90,8 +90,8 @@ function EdgeBar({ ev }) {
   const positive = ev > 0;
   const width = Math.min(100, Math.abs(ev) * 500);
   return (
-    <div className="flex items-center gap-2 min-w-0">
-      <div className="edge-bar-track flex-1" style={{ minWidth: 48 }}>
+    <div className="flex items-center gap-1.5 min-w-0">
+      <div className="edge-bar-track flex-1 hidden sm:block" style={{ minWidth: 28, maxWidth: 40 }}>
         <div
           style={{ width: `${width}%` }}
           className={`h-full rounded-full transition-all duration-700 ${
@@ -101,7 +101,7 @@ function EdgeBar({ ev }) {
           }`}
         />
       </div>
-      <span className={`text-[11px] font-bold font-mono tabular-nums w-[52px] text-right flex-shrink-0 ${evColor(ev)}`}>
+      <span className={`text-[11px] font-bold font-mono tabular-nums text-right flex-shrink-0 ${evColor(ev)}`}>
         {(ev >= 0 ? "+" : "") + pct(ev)}
       </span>
     </div>
@@ -109,28 +109,36 @@ function EdgeBar({ ev }) {
 }
 
 function MarketRow({ label, modelProb, bestOdds, ev, onAdd, canAdd, justAdded, isBest }) {
+  const lowProb = isBest && modelProb < 0.2;
   return (
-    <div className={`grid items-center gap-x-2 py-[5px] rounded-lg ${isBest ? "bg-win/[0.06] px-1.5 -mx-1.5" : ""}`}
-      style={{ gridTemplateColumns: "1fr 44px 44px 1fr 64px" }}>
-      <span className="text-[12.5px] text-paper truncate flex items-center gap-1.5">
-        {isBest && <span className="text-win text-[10px] flex-shrink-0">★</span>}
-        {label}
-      </span>
-      <span className="text-[11px] text-textDim font-mono tabular-nums text-right">{pct(modelProb)}</span>
-      <span className="text-[11px] text-paper font-mono tabular-nums text-right font-semibold">
-        {bestOdds ? bestOdds.toFixed(2) : "—"}
-      </span>
-      <EdgeBar ev={ev} />
-      {onAdd && (
-        <button
-          onClick={onAdd}
-          disabled={!canAdd || !bestOdds}
-          className={`text-[9.5px] font-bold px-1.5 py-1 rounded-lg border whitespace-nowrap disabled:opacity-25 transition-colors ${
-            justAdded ? "bg-win text-ink border-win" : "bg-panel2 text-paper border-line hover:border-violet/50"
-          }`}
-        >
-          {justAdded ? "✓" : "+ Bitácora"}
-        </button>
+    <div>
+      <div className={`grid items-center gap-x-1.5 py-[5px] rounded-lg ${isBest ? "bg-win/[0.06] px-1.5 -mx-1.5" : ""}`}
+        style={{ gridTemplateColumns: "1fr 38px 38px 56px 70px" }}>
+        <span className="text-[12.5px] text-paper truncate flex items-center gap-1.5 min-w-0">
+          {isBest && <span className="text-win text-[10px] flex-shrink-0">★</span>}
+          <span className="truncate">{label}</span>
+        </span>
+        <span className="text-[10.5px] text-textDim font-mono tabular-nums text-right">{pct(modelProb)}</span>
+        <span className="text-[10.5px] text-paper font-mono tabular-nums text-right font-semibold">
+          {bestOdds ? bestOdds.toFixed(2) : "—"}
+        </span>
+        <EdgeBar ev={ev} />
+        {onAdd && (
+          <button
+            onClick={onAdd}
+            disabled={!canAdd || !bestOdds}
+            className={`text-[9px] font-bold px-1 py-1 rounded-lg border whitespace-nowrap disabled:opacity-25 transition-colors ${
+              justAdded ? "bg-win text-ink border-win" : "bg-panel2 text-paper border-line hover:border-violet/50"
+            }`}
+          >
+            {justAdded ? "✓" : "+ Bitácora"}
+          </button>
+        )}
+      </div>
+      {lowProb && (
+        <div className="text-[9.5px] text-violet/70 pl-1.5 pb-1 -mt-0.5">
+          ⚠ Probabilidad real de ganar baja ({pct(modelProb)}) — el edge es matemático, no garantía. Es la opción con menos certeza, no la más "segura".
+        </div>
       )}
     </div>
   );
@@ -214,12 +222,12 @@ function MatchCard({ matchData, rank, onAddBet }) {
       {/* Markets body */}
       <div className="px-4 py-3 space-y-1">
         {/* Column labels */}
-        <div className="grid gap-x-2 text-[8.5px] uppercase tracking-[0.12em] text-textDim/40 font-mono pb-1 border-b border-line/40"
-          style={{ gridTemplateColumns: "1fr 44px 44px 1fr 64px" }}>
+        <div className="grid gap-x-1.5 text-[8.5px] uppercase tracking-[0.12em] text-textDim/40 font-mono pb-1 border-b border-line/40"
+          style={{ gridTemplateColumns: "1fr 38px 38px 56px 70px" }}>
           <span>Resultado</span>
           <span className="text-right">Modelo</span>
           <span className="text-right">Momio</span>
-          <span className="pl-1">Edge</span>
+          <span className="text-right">Edge</span>
           <span></span>
         </div>
 
@@ -411,10 +419,76 @@ function FeaturedPickCard({ pick, onAddBet }) {
   );
 }
 
+function ExperimentalOuCard({ pick, onAddBet }) {
+  const [home, away] = pick.match.split(" vs ");
+  const [stake, setStake] = useState("10");
+  const [added, setAdded] = useState(false);
+
+  const handleAdd = () => {
+    const amount = parseFloat(stake);
+    if (!amount || amount <= 0 || !onAddBet) return;
+    onAddBet({ match: pick.match, market: `[Seguimiento] ${pick.label}`, odds: pick.bestOdds, stake: amount, status: "pending", id: Date.now() });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
+  return (
+    <div className="glass rounded-2xl p-4 border border-lineGlow/40">
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-violet font-mono">
+          🧪 MEJOR O/U DEL DÍA · SOLO SEGUIMIENTO
+        </span>
+        <span className="text-[8px] uppercase tracking-wider text-violet/70 font-mono px-2 py-0.5 border border-lineGlow/30 rounded bg-accentSoft">
+          no es recomendación
+        </span>
+      </div>
+
+      <div className="flex items-center gap-2 mb-3">
+        <Flag team={home} />
+        <span className="text-[14px] font-bold text-paper">{home}</span>
+        <span className="text-[10px] text-textDim font-mono">vs</span>
+        <span className="text-[14px] font-bold text-paper">{away}</span>
+        <Flag team={away} />
+      </div>
+
+      <div className="flex items-center gap-3 mb-3">
+        <span className="text-[13px] font-bold text-paper">→ {pick.label}</span>
+        <span className={`text-[13px] font-bold font-mono ${evColor(pick.ev)}`}>
+          {(pick.ev >= 0 ? "+" : "") + pct(pick.ev)} edge crudo
+        </span>
+      </div>
+
+      <p className="text-[10.5px] text-violet/70 leading-relaxed mb-3">
+        Este mercado no ha demostrado señal real en backtest (ver Guía). Esta tarjeta existe solo para que registres
+        el resultado real en tu Bitácora y acumules datos — no para que la trates como una recomendación.
+      </p>
+
+      {onAddBet && (
+        <div className="flex items-center gap-2.5 pt-3 border-t border-line">
+          <span className="text-[11px] text-textDim font-mono">Monto $</span>
+          <input
+            type="number" inputMode="decimal" value={stake} onChange={e => setStake(e.target.value)}
+            className="w-16 px-2 py-1.5 text-[12px] font-mono bg-panel2 border border-line rounded-lg text-paper"
+          />
+          <button
+            onClick={handleAdd}
+            disabled={!stake || parseFloat(stake) <= 0}
+            className={`flex-1 py-1.5 text-[11px] font-bold rounded-xl transition-colors disabled:opacity-30 ${
+              added ? "bg-win text-ink" : "bg-panel2 text-violet border border-lineGlow/40"
+            }`}
+          >
+            {added ? "✓ Registrado para seguimiento" : "+ Registrar (solo seguimiento)"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function DailyPickTab({ eloTable, results, onAddBet }) {
   const { events, quota, loading, error, refresh } = useLiveOdds("soccer_fifa_world_cup", "h2h,totals");
 
-  const { rankedCandidates, matchGroups } = useMemo(() => {
+  const { rankedCandidates, matchGroups, topOuPick } = useMemo(() => {
     const list = [];
     const matchMap = {};
 
@@ -466,6 +540,16 @@ export function DailyPickTab({ eloTable, results, onAddBet }) {
     }
 
     const rankedCandidates = rankDailyCandidates(list);
+
+    // Mejor O/U del día, calculado completamente aparte del ranking
+    // principal — solo para que el usuario pueda llevar seguimiento de este
+    // mercado y acumular datos reales (ver docs/MODELO.md). Nunca se mezcla
+    // con rankedCandidates ni afecta el Pick del día.
+    const ouOnly = list.filter(c => c.market === "O/U" && c.ev > 0);
+    const topOuPick = ouOnly.length
+      ? ouOnly.reduce((best, c) => (c.ev > best.ev ? c : best), ouOnly[0])
+      : null;
+
     const matchGroups = Object.values(matchMap)
       .filter(m => m.candidates.length > 0)
       .sort((a, b) => {
@@ -480,7 +564,7 @@ export function DailyPickTab({ eloTable, results, onAddBet }) {
         return bestB - bestA;
       });
 
-    return { rankedCandidates, matchGroups };
+    return { rankedCandidates, matchGroups, topOuPick };
   }, [events, eloTable, results]);
 
   const topPick = rankedCandidates[0] ?? null;
@@ -540,6 +624,9 @@ export function DailyPickTab({ eloTable, results, onAddBet }) {
 
       {/* Featured pick hero */}
       {!loading && topPick && <FeaturedPickCard pick={topPick} onAddBet={onAddBet} />}
+
+      {/* O/U experimental — solo seguimiento, nunca compite con el Pick del día */}
+      {!loading && topOuPick && <ExperimentalOuCard pick={topOuPick} onAddBet={onAddBet} />}
 
       {/* Market grid by match */}
       {!loading && matchGroups.length > 0 && (
