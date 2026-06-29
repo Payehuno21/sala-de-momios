@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-29T10:29:58.278Z",
+  "fetchedAt": "2026-06-29T14:22:06.589Z",
   "source": "openfootball",
   "totalMatches": 104,
   "playedMatches": 73,
@@ -1345,9 +1345,9 @@
       "group": "—",
       "date": "2026-07-04",
       "time": "12:00 UTC-5",
-      "home": "W73",
+      "home": "Canada",
       "away": "W75",
-      "homeIsPlaceholder": true,
+      "homeIsPlaceholder": false,
       "awayIsPlaceholder": true,
       "played": false,
       "hg": null,
