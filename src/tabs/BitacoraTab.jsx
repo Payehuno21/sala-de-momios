@@ -4,6 +4,26 @@ import { BankrollChart } from "../components/BankrollChart.jsx";
 function pct(x) { return (x * 100).toFixed(1) + "%"; }
 function money(x) { return (x < 0 ? "-$" : "$") + Math.abs(x).toFixed(2); }
 
+// Detecta si una apuesta es de Over/Under por el texto del mercado — no
+// depende de un campo separado porque las apuestas viejas (antes de este
+// cambio) solo tienen el label de texto, no un campo "market" estructurado.
+function isOverUnder(marketLabel) {
+  const m = (marketLabel || "").toLowerCase();
+  return m.includes("más de") || m.includes("menos de") || m.includes("[seguimiento]");
+}
+
+// A partir del marcador final, calcula si el resultado real fue Over (3+
+// goles) o Under (2 o menos), y compara contra qué predijo la etiqueta del
+// mercado ("Más de 2.5" o "Menos de 2.5") — esto es lo que de verdad mide
+// si el MODELO acertó la dirección, independiente de si ganaste el momio.
+function checkDirectionHit(marketLabel, homeGoals, awayGoals) {
+  if (homeGoals === "" || awayGoals === "" || homeGoals == null || awayGoals == null) return null;
+  const total = Number(homeGoals) + Number(awayGoals);
+  const predictedOver = (marketLabel || "").toLowerCase().includes("más de");
+  const actualOver = total > 2.5;
+  return predictedOver === actualOver;
+}
+
 export function BitacoraTab({ bets, setBets, bankroll, setBankroll }) {
   const [form, setForm] = useState({ match: "", market: "", odds: "", stake: "" });
 
@@ -23,9 +43,19 @@ export function BitacoraTab({ bets, setBets, bankroll, setBankroll }) {
   }, [bets, bankroll]);
 
   const exportToCSV = () => {
-    const headers = ["Partido", "Mercado", "Momio", "Monto", "Estado"];
-    const rows = bets.map(b => [b.match, b.market, Number(b.odds).toFixed(2), Number(b.stake).toFixed(2),
-      b.status === "won" ? "Ganada" : b.status === "lost" ? "Perdida" : "Pendiente"]);
+    const headers = ["Partido", "Mercado", "Momio", "Monto", "Estado", "Marcador Final", "Acierto Dirección (O/U)"];
+    const rows = bets.map(b => {
+      const isOu = isOverUnder(b.market);
+      const hit = isOu ? checkDirectionHit(b.market, b.homeGoals, b.awayGoals) : null;
+      const score = (b.homeGoals !== undefined && b.homeGoals !== "" && b.awayGoals !== undefined && b.awayGoals !== "")
+        ? `${b.homeGoals}-${b.awayGoals}` : "";
+      return [
+        b.match, b.market, Number(b.odds).toFixed(2), Number(b.stake).toFixed(2),
+        b.status === "won" ? "Ganada" : b.status === "lost" ? "Perdida" : "Pendiente",
+        score,
+        hit === null ? "" : hit ? "Sí" : "No",
+      ];
+    });
     const csv = [headers, ...rows].map(row => row.map(c => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
     const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -43,6 +73,22 @@ export function BitacoraTab({ bets, setBets, bankroll, setBankroll }) {
   };
   const updateStatus = (id, status) => setBets(b => b.map(x => x.id === id ? { ...x, status } : x));
   const removeBet = (id) => setBets(b => b.filter(x => x.id !== id));
+  const updateScore = (id, field, value) => setBets(b => b.map(x => x.id === id ? { ...x, [field]: value } : x));
+
+  // Estadísticas de seguimiento O/U: solo cuenta apuestas con marcador
+  // ingresado, separado por completo de ganancias/pérdidas de dinero.
+  // Esto es lo que necesitas para saber si, con más partidos, este mercado
+  // empieza a mostrar señal real (ver docs/MODELO.md).
+  const ouTrackingStats = useMemo(() => {
+    const ouBets = bets.filter(b => isOverUnder(b.market));
+    const withScore = ouBets.filter(b => b.homeGoals !== undefined && b.homeGoals !== "" && b.awayGoals !== undefined && b.awayGoals !== "");
+    let hits = 0;
+    withScore.forEach(b => {
+      const hit = checkDirectionHit(b.market, b.homeGoals, b.awayGoals);
+      if (hit) hits++;
+    });
+    return { total: ouBets.length, withScore: withScore.length, hits, accuracy: withScore.length > 0 ? hits / withScore.length : null };
+  }, [bets]);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -86,6 +132,25 @@ export function BitacoraTab({ bets, setBets, bankroll, setBankroll }) {
           className="w-full py-2 text-[12px] font-bold disabled:opacity-30 glass text-paper border border-lineGlow">
           Exportar bitácora a CSV
         </button>
+
+        {ouTrackingStats.total > 0 && (
+          <div className="glass rounded-2xl p-4 border border-lineGlow/40">
+            <div className="text-[10px] uppercase tracking-wider mb-2 text-violet font-semibold">
+              🧪 Entrenamiento Over/Under
+            </div>
+            <div className="text-[12px] text-textDim mb-2">
+              {ouTrackingStats.withScore} de {ouTrackingStats.total} con marcador registrado
+            </div>
+            {ouTrackingStats.accuracy !== null ? (
+              <div>
+                <div className="text-[22px] font-bold font-mono text-violet">{pct(ouTrackingStats.accuracy)}</div>
+                <div className="text-[10px] text-textDim">acierto de dirección (no es ganancia de dinero)</div>
+              </div>
+            ) : (
+              <div className="text-[11px] text-textDim/70">Ingresa el marcador final en cada apuesta para ver el acierto.</div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="space-y-4">
@@ -116,29 +181,58 @@ export function BitacoraTab({ bets, setBets, bankroll, setBankroll }) {
 
       <div className="space-y-2">
         {bets.length === 0 && <p className="text-[12px] text-center py-4 text-textDim">Sin apuestas registradas todavía.</p>}
-        {[...bets].reverse().map(b => (
-          <div key={b.id} className={`border p-3 ${b.status === "won" ? "bg-winSoft border-winDim" : b.status === "lost" ? "bg-lossSoft border-lossDim" : "glass border-line"}`}>
-            <div className="flex justify-between items-start gap-2">
-              <div className="flex-1">
-                <div className="text-[13px] font-semibold text-paper">{b.match}</div>
-                <div className="text-[11.5px] text-textDim">{b.market} · momio {Number(b.odds).toFixed(2)} · ${Number(b.stake).toFixed(2)}</div>
+        {[...bets].reverse().map(b => {
+          const isOu = isOverUnder(b.market);
+          const directionHit = isOu ? checkDirectionHit(b.market, b.homeGoals, b.awayGoals) : null;
+          return (
+            <div key={b.id} className={`border p-3 ${b.status === "won" ? "bg-winSoft border-winDim" : b.status === "lost" ? "bg-lossSoft border-lossDim" : "glass border-line"}`}>
+              <div className="flex justify-between items-start gap-2">
+                <div className="flex-1">
+                  <div className="text-[13px] font-semibold text-paper">{b.match}</div>
+                  <div className="text-[11.5px] text-textDim">{b.market} · momio {Number(b.odds).toFixed(2)} · ${Number(b.stake).toFixed(2)}</div>
+                </div>
+                <button onClick={() => removeBet(b.id)} className="font-bold px-1 text-loss">✕</button>
               </div>
-              <button onClick={() => removeBet(b.id)} className="font-bold px-1 text-loss">✕</button>
+
+              {isOu && (
+                <div className="mt-2 pt-2 border-t border-line/50">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-violet/80 font-mono">Marcador final:</span>
+                    <input
+                      type="number" inputMode="numeric" placeholder="0" value={b.homeGoals ?? ""}
+                      onChange={e => updateScore(b.id, "homeGoals", e.target.value)}
+                      className="w-10 px-1 py-1 text-[12px] text-center glass border border-line text-paper font-mono"
+                    />
+                    <span className="text-textDim text-[11px]">–</span>
+                    <input
+                      type="number" inputMode="numeric" placeholder="0" value={b.awayGoals ?? ""}
+                      onChange={e => updateScore(b.id, "awayGoals", e.target.value)}
+                      className="w-10 px-1 py-1 text-[12px] text-center glass border border-line text-paper font-mono"
+                    />
+                    {directionHit !== null && (
+                      <span className={`text-[11px] font-bold ml-1 ${directionHit ? "text-win" : "text-loss"}`}>
+                        {directionHit ? "✓ Modelo acertó dirección" : "✗ Modelo falló dirección"}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex gap-1.5 mt-2">
+                {["pending", "won", "lost"].map(s => (
+                  <button key={s} onClick={() => updateStatus(b.id, s)}
+                    className="flex-1 py-1.5 text-[11px] font-semibold rounded-lg transition-colors"
+                    style={{
+                      background: b.status === s ? (s === "won" ? "#34eab0" : s === "lost" ? "#ff5f8f" : "#a78bfa") : "rgba(30,35,58,0.6)",
+                      color: b.status === s ? "#070914" : "#9aa0c4",
+                    }}>
+                    {s === "pending" ? "Pendiente" : s === "won" ? "Ganada" : "Perdida"}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="flex gap-1.5 mt-2">
-              {["pending", "won", "lost"].map(s => (
-                <button key={s} onClick={() => updateStatus(b.id, s)}
-                  className="flex-1 py-1.5 text-[11px] font-semibold rounded-lg transition-colors"
-                  style={{
-                    background: b.status === s ? (s === "won" ? "#34eab0" : s === "lost" ? "#ff5f8f" : "#a78bfa") : "rgba(30,35,58,0.6)",
-                    color: b.status === s ? "#070914" : "#9aa0c4",
-                  }}>
-                  {s === "pending" ? "Pendiente" : s === "won" ? "Ganada" : "Perdida"}
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
