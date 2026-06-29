@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-06-29T18:11:01.877Z",
+  "fetchedAt": "2026-06-29T20:17:23.054Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 73,
+  "playedMatches": 74,
   "matches": [
     {
       "matchNum": null,
@@ -1139,9 +1139,9 @@
       "away": "Japon",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 1,
       "venue": "Houston"
     },
     {
