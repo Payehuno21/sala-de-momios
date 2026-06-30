@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-06-30T22:04:20.522Z",
+  "fetchedAt": "2026-06-30T23:38:00.209Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 77,
+  "playedMatches": 78,
   "matches": [
     {
       "matchNum": null,
@@ -1154,9 +1154,9 @@
       "away": "Suecia",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 3,
+      "ag": 0,
       "venue": "New York/New Jersey (East Rutherford)"
     },
     {
