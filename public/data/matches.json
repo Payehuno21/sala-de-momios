@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-06-29T23:01:27.233Z",
+  "fetchedAt": "2026-06-30T00:20:15.975Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 74,
+  "playedMatches": 75,
   "matches": [
     {
       "matchNum": null,
@@ -1109,9 +1109,9 @@
       "away": "Paraguay",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 1,
       "venue": "Boston (Foxborough)"
     },
     {
