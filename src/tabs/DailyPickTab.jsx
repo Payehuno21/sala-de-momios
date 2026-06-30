@@ -148,14 +148,18 @@ function MatchCard({ matchData, rank, onAddBet }) {
   const { home, away, candidates, bookCount } = matchData;
   const mlRows = candidates.filter(c => c.market === "ML");
   const ouRows = candidates.filter(c => c.market === "O/U");
-  // La estrella ★ solo puede caer en ML — mismo criterio estructural que
-  // rankDailyCandidates en confidenceEngine.js. O/U nunca compite por esta
-  // marca, sin importar qué tan grande sea su edge crudo aparente (ver
-  // docs/MODELO.md: ese mercado no tiene señal validada).
-  const bestMlEv = mlRows.length ? Math.max(...mlRows.map(c => c.ev)) : 0;
+  // La estrella ★ solo puede caer en ML, con probabilidad real >= 35% —
+  // mismo criterio estructural que rankDailyCandidates en
+  // confidenceEngine.js. O/U nunca compite por esta marca, y tampoco
+  // candidatos de muy baja probabilidad (ver comentario extenso en
+  // confidenceEngine.js sobre por qué esto debe ser una exclusión dura,
+  // no una penalización — 3 casos reales en producción demostraron que
+  // ninguna penalización numérica bastaba).
+  const eligibleMlRows = mlRows.filter(c => c.modelProb >= 0.35);
+  const bestMlEv = eligibleMlRows.length ? Math.max(...eligibleMlRows.map(c => c.ev)) : 0;
   const bestEv = bestMlEv; // se usa para el badge "max +X%" del header de la tarjeta
   const bestCandidate = bestMlEv > 0.02
-    ? mlRows.reduce((best, c) => (c.ev > best.ev ? c : best), mlRows[0])
+    ? eligibleMlRows.reduce((best, c) => (c.ev > best.ev ? c : best), eligibleMlRows[0])
     : null;
   const isBestRow = (c) => bestCandidate && c.label === bestCandidate.label && c.market === bestCandidate.market;
   const allWarnings = [...new Set(candidates.flatMap(c => c.warnings))];
