@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-06-30T18:25:38.766Z",
+  "fetchedAt": "2026-06-30T20:30:31.692Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 76,
+  "playedMatches": 77,
   "matches": [
     {
       "matchNum": null,
@@ -1169,9 +1169,9 @@
       "away": "Noruega",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 2,
       "venue": "Dallas (Arlington)"
     },
     {
