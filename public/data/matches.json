@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-01T22:23:18.736Z",
+  "fetchedAt": "2026-07-01T23:52:02.754Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 80,
+  "playedMatches": 81,
   "matches": [
     {
       "matchNum": null,
@@ -1229,9 +1229,9 @@
       "away": "Senegal",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 2,
       "venue": "Seattle"
     },
     {
