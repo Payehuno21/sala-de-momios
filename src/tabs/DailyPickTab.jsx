@@ -425,65 +425,56 @@ function FeaturedPickCard({ pick, onAddBet }) {
 
 function ExperimentalOuCard({ pick, onAddBet }) {
   const [home, away] = pick.match.split(" vs ");
-  const [stake, setStake] = useState("10");
   const [added, setAdded] = useState(false);
 
   const handleAdd = () => {
-    const amount = parseFloat(stake);
-    if (!amount || amount <= 0 || !onAddBet) return;
-    onAddBet({ match: pick.match, market: `[Seguimiento] ${pick.label}`, odds: pick.bestOdds, stake: amount, status: "pending", id: Date.now() });
+    if (!onAddBet) return;
+    // Stake fijo de $0 para que quede claro en la bitácora que NO es
+    // una apuesta real — solo un registro de seguimiento del experimento.
+    onAddBet({ match: pick.match, market: `[Seguimiento O/U] ${pick.label}`, odds: pick.bestOdds, stake: 0, status: "pending", id: Date.now() });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
 
   return (
-    <div className="glass rounded-2xl p-4 border border-lineGlow/40">
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-violet font-mono">
-          🧪 MEJOR O/U DEL DÍA · SOLO SEGUIMIENTO
-        </span>
-        <span className="text-[8px] uppercase tracking-wider text-violet/70 font-mono px-2 py-0.5 border border-lineGlow/30 rounded bg-accentSoft">
-          no es recomendación
+    <div className="rounded-2xl p-4 border-2 border-dashed border-violet/30 bg-violet/[0.04]">
+      {/* Advertencia visual prominente arriba — difícil de ignorar */}
+      <div className="flex items-center gap-2 mb-3 px-3 py-2 rounded-xl bg-loss/10 border border-loss/30">
+        <span className="text-loss text-[14px] flex-shrink-0">⛔</span>
+        <span className="text-[10px] font-bold text-loss leading-tight">
+          ESTO NO ES UNA APUESTA RECOMENDADA — es un dato de seguimiento para entrenar el modelo. No uses esto como base para apostar dinero real.
         </span>
       </div>
 
-      <div className="flex items-center gap-2 mb-3">
+      <div className="text-[9px] font-bold uppercase tracking-[0.18em] text-violet/60 font-mono mb-2">
+        🧪 Experimento O/U · Datos para entrenamiento
+      </div>
+
+      <div className="flex items-center gap-2 mb-2">
         <Flag team={home} />
-        <span className="text-[14px] font-bold text-paper">{home}</span>
+        <span className="text-[13px] font-semibold text-paper/80">{home}</span>
         <span className="text-[10px] text-textDim font-mono">vs</span>
-        <span className="text-[14px] font-bold text-paper">{away}</span>
+        <span className="text-[13px] font-semibold text-paper/80">{away}</span>
         <Flag team={away} />
       </div>
 
-      <div className="flex items-center gap-3 mb-3">
-        <span className="text-[13px] font-bold text-paper">→ {pick.label}</span>
-        <span className={`text-[13px] font-bold font-mono ${evColor(pick.ev)}`}>
-          {(pick.ev >= 0 ? "+" : "") + pct(pick.ev)} edge crudo
-        </span>
+      <div className="text-[12px] text-textDim/70 mb-3">
+        O/U con mayor edge crudo hoy: <span className="text-paper/70 font-mono">{pick.label}</span>
+        <span className="text-textDim/50 ml-2 font-mono text-[11px]">({(pick.ev >= 0 ? "+" : "") + pct(pick.ev)} edge — no validado)</span>
       </div>
 
-      <p className="text-[10.5px] text-violet/70 leading-relaxed mb-3">
-        Este mercado no ha demostrado señal real en backtest (ver Guía). Esta tarjeta existe solo para que registres
-        el resultado real en tu Bitácora y acumules datos — no para que la trates como una recomendación.
+      <p className="text-[10px] text-violet/50 leading-relaxed mb-3 italic">
+        Over/Under no ha superado la tasa base en backtest (ver Guía). Registra el resultado real en tu Bitácora para ir acumulando datos — no para apostar.
       </p>
 
       {onAddBet && (
-        <div className="flex items-center gap-2.5 pt-3 border-t border-line">
-          <span className="text-[11px] text-textDim font-mono">Monto $</span>
-          <input
-            type="number" inputMode="decimal" value={stake} onChange={e => setStake(e.target.value)}
-            className="w-16 px-2 py-1.5 text-[12px] font-mono bg-panel2 border border-line rounded-lg text-paper"
-          />
-          <button
-            onClick={handleAdd}
-            disabled={!stake || parseFloat(stake) <= 0}
-            className={`flex-1 py-1.5 text-[11px] font-bold rounded-xl transition-colors disabled:opacity-30 ${
-              added ? "bg-win text-ink" : "bg-panel2 text-violet border border-lineGlow/40"
-            }`}
-          >
-            {added ? "✓ Registrado para seguimiento" : "+ Registrar (solo seguimiento)"}
-          </button>
-        </div>
+        <button
+          onClick={handleAdd}
+          disabled={added}
+          className="w-full py-1.5 text-[10px] font-semibold rounded-xl border border-dashed border-violet/30 text-violet/60 bg-transparent disabled:opacity-50"
+        >
+          {added ? "✓ Registrado en bitácora (monto $0, solo seguimiento)" : "📋 Registrar para seguimiento (sin dinero real)"}
+        </button>
       )}
     </div>
   );
