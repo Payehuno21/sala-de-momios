@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-01T17:02:45.532Z",
+  "fetchedAt": "2026-07-01T19:12:46.778Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 79,
+  "playedMatches": 80,
   "matches": [
     {
       "matchNum": null,
@@ -1199,9 +1199,9 @@
       "away": "Rep. Dem. Congo",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 1,
       "venue": "Atlanta"
     },
     {
