@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-02T19:56:40.914Z",
+  "fetchedAt": "2026-07-02T21:17:45.698Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 82,
+  "playedMatches": 83,
   "matches": [
     {
       "matchNum": null,
@@ -1259,9 +1259,9 @@
       "away": "Austria",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 3,
+      "ag": 0,
       "venue": "Los Angeles (Inglewood)"
     },
     {
