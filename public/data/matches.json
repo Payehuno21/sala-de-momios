@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-03T20:40:40.277Z",
+  "fetchedAt": "2026-07-03T21:46:55.941Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 85,
+  "playedMatches": 86,
   "matches": [
     {
       "matchNum": null,
@@ -1319,9 +1319,9 @@
       "away": "Egipto",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 1,
       "venue": "Dallas (Arlington)"
     },
     {
