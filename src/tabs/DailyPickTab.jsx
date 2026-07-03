@@ -145,7 +145,7 @@ function MarketRow({ label, modelProb, bestOdds, ev, onAdd, canAdd, justAdded, i
 }
 
 function MatchCard({ matchData, rank, onAddBet }) {
-  const { home, away, candidates, bookCount } = matchData;
+  const { home, away, candidates, bookCount, bttsProb, bttsNoProb } = matchData;
   const mlRows = candidates.filter(c => c.market === "ML");
   const ouRows = candidates.filter(c => c.market === "O/U");
   // La estrella ★ solo puede caer en ML, con probabilidad real >= 35% —
@@ -265,6 +265,26 @@ function MatchCard({ matchData, rank, onAddBet }) {
                 justAdded={addedKey === `${c.market}-${c.label}`}
               />
             ))}
+          </div>
+        )}
+
+        {/* BTTS — solo probabilidad del modelo, sin momio real ni edge.
+            La API no expone este mercado en el endpoint principal (error 422).
+            Úsalo para comparar contra el momio de tu casa y decidir tú. */}
+        {bttsProb != null && (
+          <div className="pt-2.5">
+            <div className="flex items-center gap-2 pb-1">
+              <span className="text-[8px] uppercase tracking-[0.15em] text-textDim/35 font-mono">Ambos anotan</span>
+              <span className="text-[7px] uppercase tracking-wider px-1.5 py-[2px] rounded bg-panel2 text-textDim/50 border border-line/30">solo modelo · sin edge</span>
+            </div>
+            <div className="grid gap-x-1.5 py-[4px]" style={{ gridTemplateColumns: "1fr 38px" }}>
+              <span className="text-[12px] text-textDim/60">Ambos anotan: Sí</span>
+              <span className="text-[11px] text-textDim/60 font-mono tabular-nums text-right">{pct(bttsProb)}</span>
+            </div>
+            <div className="grid gap-x-1.5 py-[4px]" style={{ gridTemplateColumns: "1fr 38px" }}>
+              <span className="text-[12px] text-textDim/60">Ambos anotan: No</span>
+              <span className="text-[11px] text-textDim/60 font-mono tabular-nums text-right">{pct(bttsNoProb)}</span>
+            </div>
           </div>
         )}
 
@@ -518,7 +538,15 @@ export function DailyPickTab({ eloTable, results, onAddBet }) {
 
       const matchKey = `${home} vs ${away}`;
       if (!matchMap[matchKey]) {
-        matchMap[matchKey] = { match: matchKey, home, away, candidates: [], bookCount: event.bookmakers?.length ?? 0 };
+        matchMap[matchKey] = {
+          match: matchKey, home, away, candidates: [],
+          bookCount: event.bookmakers?.length ?? 0,
+          // BTTS: solo probabilidad del modelo, sin momio real ni edge calculable
+          // (la API no expone btts en el endpoint principal). Se muestra como
+          // referencia informativa para que el usuario compare contra su casa.
+          bttsProb: probs.btts,
+          bttsNoProb: probs.bttsNo,
+        };
       }
 
       for (const def of marketDefs) {
