@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-02T23:46:00.035Z",
+  "fetchedAt": "2026-07-03T08:53:38.464Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 83,
+  "playedMatches": 85,
   "matches": [
     {
       "matchNum": null,
@@ -1244,9 +1244,9 @@
       "away": "Croacia",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 1,
       "venue": "Toronto"
     },
     {
@@ -1274,9 +1274,9 @@
       "away": "Argelia",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 0,
       "venue": "Vancouver"
     },
     {
