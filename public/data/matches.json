@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-04T22:11:48.312Z",
+  "fetchedAt": "2026-07-04T23:15:04.302Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 89,
+  "playedMatches": 90,
   "matches": [
     {
       "matchNum": null,
@@ -1334,9 +1334,9 @@
       "away": "Francia",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 1,
       "venue": "Philadelphia"
     },
     {
