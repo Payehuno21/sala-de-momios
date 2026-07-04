@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-04T18:33:16.684Z",
+  "fetchedAt": "2026-07-04T19:56:31.878Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 88,
+  "playedMatches": 89,
   "matches": [
     {
       "matchNum": null,
@@ -1349,9 +1349,9 @@
       "away": "Marruecos",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 3,
       "venue": "Houston"
     },
     {
