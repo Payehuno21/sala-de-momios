@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-04T00:17:51.573Z",
+  "fetchedAt": "2026-07-04T08:28:10.454Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 86,
+  "playedMatches": 88,
   "matches": [
     {
       "matchNum": null,
@@ -1289,9 +1289,9 @@
       "away": "Cabo Verde",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 1,
       "venue": "Miami (Miami Gardens)"
     },
     {
@@ -1304,9 +1304,9 @@
       "away": "Ghana",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 0,
       "venue": "Kansas City"
     },
     {
