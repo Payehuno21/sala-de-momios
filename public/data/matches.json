@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-05T21:42:17.806Z",
+  "fetchedAt": "2026-07-05T22:42:20.728Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 90,
+  "playedMatches": 91,
   "matches": [
     {
       "matchNum": null,
@@ -1364,9 +1364,9 @@
       "away": "Noruega",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 2,
       "venue": "New York/New Jersey (East Rutherford)"
     },
     {
