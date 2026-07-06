@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-05T23:46:55.026Z",
+  "fetchedAt": "2026-07-06T10:04:07.404Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 91,
+  "playedMatches": 92,
   "matches": [
     {
       "matchNum": null,
@@ -1379,9 +1379,9 @@
       "away": "Inglaterra",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 3,
       "venue": "Mexico City"
     },
     {
