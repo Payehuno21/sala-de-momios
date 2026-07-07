@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-07T17:01:18.057Z",
+  "fetchedAt": "2026-07-07T19:15:06.190Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 94,
+  "playedMatches": 95,
   "matches": [
     {
       "matchNum": null,
@@ -1424,9 +1424,9 @@
       "away": "Egipto",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 3,
+      "ag": 2,
       "venue": "Atlanta"
     },
     {
