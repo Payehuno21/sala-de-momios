@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-07T22:19:11.300Z",
+  "fetchedAt": "2026-07-07T23:30:25.309Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 95,
+  "playedMatches": 96,
   "matches": [
     {
       "matchNum": null,
@@ -1439,9 +1439,9 @@
       "away": "Colombia",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 0,
       "venue": "Vancouver"
     },
     {
