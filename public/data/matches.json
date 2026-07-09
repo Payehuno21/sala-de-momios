@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-09T20:56:35.878Z",
+  "fetchedAt": "2026-07-09T22:37:36.703Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 96,
+  "playedMatches": 97,
   "matches": [
     {
       "matchNum": null,
@@ -1454,9 +1454,9 @@
       "away": "Marruecos",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 0,
       "venue": "Boston (Foxborough)"
     },
     {
