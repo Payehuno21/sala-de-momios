@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-10T19:58:56.629Z",
+  "fetchedAt": "2026-07-10T21:14:46.275Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 97,
+  "playedMatches": 98,
   "matches": [
     {
       "matchNum": null,
@@ -1469,9 +1469,9 @@
       "away": "Belgica",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 2,
+      "ag": 1,
       "venue": "Los Angeles (Inglewood)"
     },
     {
