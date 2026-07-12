@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-11T23:58:51.203Z",
+  "fetchedAt": "2026-07-12T08:06:13.727Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 99,
+  "playedMatches": 100,
   "matches": [
     {
       "matchNum": null,
@@ -1499,9 +1499,9 @@
       "away": "Suiza",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 1,
+      "ag": 1,
       "venue": "Kansas City"
     },
     {
