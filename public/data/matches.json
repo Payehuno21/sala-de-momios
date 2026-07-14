@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-14T20:45:16.863Z",
+  "fetchedAt": "2026-07-14T22:01:13.527Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 100,
+  "playedMatches": 101,
   "matches": [
     {
       "matchNum": null,
@@ -1514,9 +1514,9 @@
       "away": "Espana",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 0,
+      "ag": 2,
       "venue": "Dallas (Arlington)"
     },
     {
