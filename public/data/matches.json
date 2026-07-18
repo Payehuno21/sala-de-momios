@@ -1,8 +1,8 @@
 {
-  "fetchedAt": "2026-07-18T22:53:38.614Z",
+  "fetchedAt": "2026-07-18T23:56:45.544Z",
   "source": "openfootball",
   "totalMatches": 104,
-  "playedMatches": 102,
+  "playedMatches": 103,
   "matches": [
     {
       "matchNum": null,
@@ -1544,9 +1544,9 @@
       "away": "Inglaterra",
       "homeIsPlaceholder": false,
       "awayIsPlaceholder": false,
-      "played": false,
-      "hg": null,
-      "ag": null,
+      "played": true,
+      "hg": 4,
+      "ag": 6,
       "venue": "Miami (Miami Gardens)"
     },
     {
